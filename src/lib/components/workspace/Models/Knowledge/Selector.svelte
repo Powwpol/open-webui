@@ -196,9 +196,9 @@
 											File
 										</div>
 									{:else if item?.type === 'note'}
-										<div
-											class="bg-blue-500/20 text-blue-700 dark:text-blue-200 rounded-sm uppercase text-xs font-semibold px-1 shrink-0"
-										>
+								<div
+									class="bg-[#FF6A00]/20 text-[#FF6A00] dark:text-orange-200 rounded-sm uppercase text-xs font-semibold px-1 shrink-0"
+								>
 											Note
 										</div>
 									{:else}

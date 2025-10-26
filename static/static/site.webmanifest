@@ -1,7 +1,14 @@
 {
-  "name": "Open WebUI",
-  "short_name": "WebUI",
+  "name": "Pulsai",
+  "short_name": "Pulsai",
+  "description": "Advanced AI Assistant with Multi-Backend Support",
   "icons": [
+    {
+      "src": "/static/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "/static/web-app-manifest-192x192.png",
       "sizes": "192x192",
@@ -12,10 +19,18 @@
       "src": "/static/web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "theme_color": "#FA4616",
+  "background_color": "#000000",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/"
 }

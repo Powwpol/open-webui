@@ -1,0 +1,153 @@
+version: '3.8'
+
+# Pulsai Complete Docker Compose
+# Includes: Frontend, Backend, Ollama, Redis, MCP Server
+
+services:
+  # ======================================
+  # Pulsai Backend (FastAPI)
+  # ======================================
+  pulsai-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USE_CUDA: "false"
+        USE_OLLAMA: "false"
+        USE_SLIM: "false"
+    image: pulsai/backend:latest
+    container_name: pulsai-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - WEBUI_NAME=Pulsai
+      - ENV=production
+      
+      # Database
+      - DATABASE_URL=sqlite:///app/backend/data/webui.db
+      
+      # Redis
+      - REDIS_URL=redis://pulsai-redis:6379/0
+      
+      # Ollama
+      - OLLAMA_BASE_URL=http://pulsai-ollama:11434
+      
+      # MCP Configuration
+      - MCP_CONFIG_PATH=/app/config/mcp-servers.yaml
+      
+      # Security
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-change-me-to-a-secure-secret}
+      
+      # Features
+      - ENABLE_SIGNUP=${ENABLE_SIGNUP:-true}
+      - ENABLE_WEBHOOKS=true
+      - ANONYMIZED_TELEMETRY=false
+      
+      # Logging
+      - LOG_LEVEL=INFO
+    
+    volumes:
+      - pulsai-data:/app/backend/data
+      - ./config:/app/config:ro
+    
+    depends_on:
+      - pulsai-redis
+      - pulsai-ollama
+      - pulsai-mcp
+    
+    networks:
+      - pulsai-network
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ======================================
+  # Pulsai Redis (Cache & Sessions)
+  # ======================================
+  pulsai-redis:
+    image: redis:7-alpine
+    container_name: pulsai-redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - pulsai-redis-data:/data
+    networks:
+      - pulsai-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # ======================================
+  # Pulsai Ollama (Local LLM Inference)
+  # ======================================
+  pulsai-ollama:
+    image: ollama/ollama:latest
+    container_name: pulsai-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - pulsai-ollama-data:/root/.ollama
+    networks:
+      - pulsai-network
+    # Uncomment for GPU support
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  # ======================================
+  # Pulsai MCP Server (Model Context Protocol)
+  # ======================================
+  pulsai-mcp:
+    build:
+      context: ./mcp-server
+      dockerfile: Dockerfile
+    image: pulsai/mcp:latest
+    container_name: pulsai-mcp
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+      - LOG_LEVEL=INFO
+    networks:
+      - pulsai-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# ======================================
+# Volumes
+# ======================================
+volumes:
+  pulsai-data:
+    name: pulsai-data
+  pulsai-redis-data:
+    name: pulsai-redis-data
+  pulsai-ollama-data:
+    name: pulsai-ollama-data
+
+# ======================================
+# Networks
+# ======================================
+networks:
+  pulsai-network:
+    name: pulsai-network
+    driver: bridge
+

@@ -1,0 +1,391 @@
+version: '3.8'
+
+# Pulsai - Production Docker Compose Configuration
+# Multi-service architecture with health checks, resource limits, and security
+
+networks:
+  pulsai-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+  ollama-data:
+    driver: local
+  chroma-data:
+    driver: local
+  pulsai-data:
+    driver: local
+
+services:
+  # ============================================
+  # Frontend (Nginx + SvelteKit Static Build)
+  # ============================================
+  pulsai-frontend:
+    image: pulsai/frontend:latest
+    build:
+      context: .
+      dockerfile: docker/pulsai-frontend.Dockerfile
+      args:
+        - NODE_VERSION=20
+    container_name: pulsai-frontend
+    restart: unless-stopped
+    ports:
+      - "${PULSAI_PORT:-3000}:80"
+    networks:
+      - pulsai-network
+    environment:
+      - PULSAI_BACKEND_URL=http://pulsai-backend:8080
+    depends_on:
+      pulsai-backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ============================================
+  # Backend API (FastAPI)
+  # ============================================
+  pulsai-backend:
+    image: pulsai/backend:latest
+    build:
+      context: .
+      dockerfile: docker/pulsai-backend.Dockerfile
+      args:
+        - PYTHON_VERSION=3.11
+    container_name: pulsai-backend
+    restart: unless-stopped
+    ports:
+      - "${PULSAI_API_PORT:-8080}:8080"
+    networks:
+      - pulsai-network
+    volumes:
+      - pulsai-data:/app/backend/data
+      - ./config:/app/config:ro
+    environment:
+      # Database
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-pulsai}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-pulsai}
+      
+      # Redis
+      - REDIS_URL=redis://redis:6379/0
+      
+      # Application
+      - ENV=production
+      - PORT=8080
+      - PULSAI_NAME=Pulsai
+      - SECRET_KEY=${SECRET_KEY}
+      
+      # Ollama
+      - OLLAMA_BASE_URL=http://ollama:11434
+      
+      # vLLM (optional)
+      - VLLM_ENABLED=${VLLM_ENABLED:-false}
+      - VLLM_BASE_URL=${VLLM_BASE_URL:-}
+      
+      # MCP Configuration
+      - MCP_CONFIG_PATH=/app/config/mcp-servers.yaml
+      
+      # Vector Database
+      - CHROMA_HTTP_HOST=chroma
+      - CHROMA_HTTP_PORT=8000
+      
+      # External APIs
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      
+      # n8n Webhooks
+      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      chroma:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+      replicas: ${PULSAI_BACKEND_REPLICAS:-1}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+  # ============================================
+  # Custom MCP Server
+  # ============================================
+  pulsai-mcp:
+    image: pulsai/mcp-server:latest
+    build:
+      context: ./mcp-server
+      dockerfile: Dockerfile
+    container_name: pulsai-mcp
+    restart: unless-stopped
+    ports:
+      - "${PULSAI_MCP_PORT:-8100}:8100"
+    networks:
+      - pulsai-network
+    environment:
+      - PULSAI_API_URL=http://pulsai-backend:8080
+      - MCP_PORT=8100
+      - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN:-}
+    depends_on:
+      pulsai-backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8100/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ============================================
+  # PostgreSQL Database
+  # ============================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: pulsai-postgres
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    networks:
+      - pulsai-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-pulsai}
+      - POSTGRES_USER=${POSTGRES_USER:-pulsai}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF8 --lc-collate=C --lc-ctype=C
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pulsai}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+    command: >
+      postgres
+      -c shared_buffers=256MB
+      -c max_connections=200
+      -c work_mem=4MB
+      -c maintenance_work_mem=128MB
+      -c effective_cache_size=1GB
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=8MB
+      -c default_statistics_target=100
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+
+  # ============================================
+  # Redis (Cache & Sessions)
+  # ============================================
+  redis:
+    image: redis:7-alpine
+    container_name: pulsai-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    networks:
+      - pulsai-network
+    volumes:
+      - redis-data:/data
+    command: >
+      redis-server
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --save 60 1000
+      --appendonly yes
+      --appendfsync everysec
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "2"
+
+  # ============================================
+  # Ollama (LLM Inference)
+  # ============================================
+  ollama:
+    image: ollama/ollama:latest
+    container_name: pulsai-ollama
+    restart: unless-stopped
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    networks:
+      - pulsai-network
+    volumes:
+      - ollama-data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_ORIGINS=*
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '2.0'
+          memory: 4G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  # ============================================
+  # Chroma (Vector Database)
+  # ============================================
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: pulsai-chroma
+    restart: unless-stopped
+    ports:
+      - "${CHROMA_PORT:-8000}:8000"
+    networks:
+      - pulsai-network
+    volumes:
+      - chroma-data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/chroma/chroma
+      - ALLOW_RESET=TRUE
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+  # ============================================
+  # n8n (Workflow Automation) - Optional
+  # ============================================
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: pulsai-n8n
+    restart: unless-stopped
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    networks:
+      - pulsai-network
+    volumes:
+      - ./n8n-data:/home/node/.n8n
+    environment:
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-http}
+      - WEBHOOK_URL=${N8N_WEBHOOK_URL:-http://localhost:5678/}
+      - GENERIC_TIMEZONE=UTC
+    profiles:
+      - n8n
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:5678/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+

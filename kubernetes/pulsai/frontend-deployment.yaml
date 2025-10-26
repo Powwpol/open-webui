@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pulsai-frontend
+  namespace: pulsai
+  labels:
+    app: pulsai-frontend
+    component: ui
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app: pulsai-frontend
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pulsai-frontend
+  namespace: pulsai
+  labels:
+    app: pulsai-frontend
+    component: ui
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: pulsai-frontend
+  template:
+    metadata:
+      labels:
+        app: pulsai-frontend
+        component: ui
+        version: v1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - pulsai-frontend
+              topologyKey: kubernetes.io/hostname
+      containers:
+      - name: frontend
+        image: pulsai/frontend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        env:
+        - name: PULSAI_BACKEND_URL
+          value: "http://pulsai-backend:8080"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+

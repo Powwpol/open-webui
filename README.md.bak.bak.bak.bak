@@ -1,0 +1,64 @@
+## Running the Project with Docker
+
+This project provides Dockerfiles for both the backend (Python) and frontend (TypeScript/SvelteKit), along with a `docker-compose.yaml` to orchestrate all services, including Redis and Postgres.
+
+### Project-Specific Requirements
+
+- **Backend**
+  - Python 3.13-slim
+  - Dependencies from `requirements.txt` installed in a virtual environment
+  - Exposes port **8080**
+  - Default command: `/app/start.sh`
+- **Frontend**
+  - Node.js version **22.13.1-slim** (set via `ARG NODE_VERSION`)
+  - Uses npm for dependency management and build
+  - Exposes port **3000**
+  - Default command: `npm run preview`
+- **Redis**
+  - Uses the official `redis:latest` image
+  - Healthcheck enabled
+- **Postgres**
+  - Uses the official `postgres:latest` image
+  - Environment variables:
+    - `POSTGRES_USER=webui`
+    - `POSTGRES_PASSWORD=webui`
+    - `POSTGRES_DB=webui`
+  - Healthcheck enabled
+
+### Environment Variables
+
+- Backend and frontend services support `.env` files (see `.env.example` in backend). Uncomment the `env_file` lines in `docker-compose.yaml` if you want to use them.
+- For Postgres, credentials are set via environment variables in the compose file.
+
+### Build and Run Instructions
+
+1. **Clone the repository** and ensure Docker and Docker Compose are installed.
+2. **Build and start all services:**
+   ```sh
+   docker compose up --build
+   ```
+   This will build the backend, frontend, Redis, and Postgres containers and start them.
+3. **Access the services:**
+   - **Frontend:** http://localhost:3000
+   - **Backend API:** http://localhost:8080
+
+### Special Configuration
+
+- **Persistent Data:**
+  - To persist Redis and Postgres data, uncomment the `volumes` sections in `docker-compose.yaml`.
+- **Custom Environment Variables:**
+  - Place your environment variables in `.env` files in the respective service directories and uncomment the `env_file` lines in the compose file.
+- **User Security:**
+  - Both backend and frontend containers run as a non-root user (`webuiuser`) for improved security.
+- **Network:**
+  - All services are connected via the `webui-net` bridge network.
+
+### Ports
+
+- **Backend:** 8080
+- **Frontend:** 3000
+- **Redis/Postgres:** Internal only (not exposed to host by default)
+
+---
+
+_This section was updated to reflect the current Docker setup. For more details, see the provided Dockerfiles and `docker-compose.yaml`._

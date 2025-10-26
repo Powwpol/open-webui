@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pulsai-config
+  namespace: pulsai
+  labels:
+    app: pulsai
+data:
+  # Application Settings
+  ENV: "production"
+  PULSAI_NAME: "Pulsai"
+  
+  # Database
+  POSTGRES_DB: "pulsai"
+  POSTGRES_USER: "pulsai"
+  DATABASE_URL: "postgresql://pulsai:$(POSTGRES_PASSWORD)@postgres:5432/pulsai"
+  
+  # Redis
+  REDIS_URL: "redis://redis:6379/0"
+  
+  # Ollama
+  OLLAMA_BASE_URL: "http://ollama:11434"
+  
+  # vLLM
+  VLLM_ENABLED: "false"
+  VLLM_BASE_URL: ""
+  
+  # Chroma
+  CHROMA_HTTP_HOST: "chroma"
+  CHROMA_HTTP_PORT: "8000"
+  
+  # MCP Configuration
+  MCP_CONFIG_PATH: "/app/config/mcp-servers.yaml"
+  
+  # Logging
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "json"
+  
+  # CORS
+  CORS_ORIGINS: "*"
+  
+  # Features
+  ENABLE_SIGNUP: "true"
+  ENABLE_WEBHOOKS: "true"
+  ENABLE_TELEMETRY: "false"
+

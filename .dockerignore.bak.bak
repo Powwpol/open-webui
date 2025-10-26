@@ -1,0 +1,90 @@
+# Version control
+.git/
+.gitignore
+.svn/
+.hg/
+
+# Docker files
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Node.js / TypeScript
+node_modules/
+npm-debug.log
+yarn-debug.log
+pnpm-debug.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+
+# Build outputs
+build/
+dist/
+out/
+
+# Test and coverage
+coverage/
+test/
+tests/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# IDE/editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Development artifacts
+*.log
+debug/
+tmp/
+temp/
+*.tmp
+
+# Environment and secrets
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.crt
+config.local.*
+*.local.yml
+.local/
+
+# Documentation
+README*
+docs/
+*.md
+CHANGELOG.md
+
+# Project-specific
+scripts/
+cypress/
+
+# Miscellaneous
+*.bak
+*.orig
+
+# Exclude lock files from ignore (as per instructions)
+!*.lock
+
+# Exclude gradle/maven files and directories (as per instructions)
+!.gradle/
+!.mvn/
+!.gradlew
+!.mvnw
+
+# Exclude static assets from ignore (keep static/)
+# (Do not ignore static/)
+
+# Exclude public assets (keep static/)
+# (Do not ignore static/)

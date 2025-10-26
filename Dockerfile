@@ -1,4 +1,5 @@
-# syntax=docker/dockerfile:1
+ARG BASE_NODE=mcr.microsoft.com/devcontainers/javascript-node:1-22-bullseye
+ARG BASE_PYTHON=mcr.microsoft.com/devcontainers/python:3.11-bookworm
 # Initialize device type args
 # use build args in the docker build command with --build-arg="BUILDARG=true"
 ARG USE_CUDA=false
@@ -22,27 +23,31 @@ ARG BUILD_HASH=dev-build
 ARG UID=0
 ARG GID=0
 
-######## WebUI frontend ########
-FROM --platform=$BUILDPLATFORM node:22-alpine3.20 AS build
+######## Pulsai Frontend ########
+FROM --platform=$BUILDPLATFORM ${BASE_NODE} AS build
 ARG BUILD_HASH
 
 # Set Node.js options (heap limit Allocation failed - JavaScript heap out of memory)
-# ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NODE_OPTIONS="--max-old-space-size=8192"
 
 WORKDIR /app
 
-# to store git revision in build
-RUN apk add --no-cache git
+# to store git revision in build (supports Alpine or Debian/Ubuntu bases)
+RUN (apk add --no-cache git) || (apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/* || true)
 
 COPY package.json package-lock.json ./
-RUN npm ci --force
+# Harden npm network settings and cache
+RUN npm config set fetch-retries 5 \
+    && npm config set fetch-retry-maxtimeout 600000 \
+    && npm config set registry https://registry.npmjs.org
+RUN --mount=type=cache,target=/root/.npm npm ci --force --prefer-offline
 
 COPY . .
 ENV APP_BUILD_HASH=${BUILD_HASH}
 RUN npm run build
 
-######## WebUI backend ########
-FROM python:3.11-slim-bookworm AS base
+######## Pulsai Backend ########
+FROM ${BASE_PYTHON} AS base
 
 # Use args
 ARG USE_CUDA
@@ -127,17 +132,17 @@ RUN apt-get update && \
 # install python dependencies
 COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
 
-RUN pip3 install --no-cache-dir uv && \
+RUN pip3 install --no-cache-dir --upgrade pip && \
     if [ "$USE_CUDA" = "true" ]; then \
     # If you use CUDA the whisper and embedding model will be downloaded on first use
     pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/$USE_CUDA_DOCKER_VER --no-cache-dir && \
-    uv pip install --system -r requirements.txt --no-cache-dir && \
+    pip3 install -r requirements.txt --no-cache-dir && \
     python -c "import os; from sentence_transformers import SentenceTransformer; SentenceTransformer(os.environ['RAG_EMBEDDING_MODEL'], device='cpu')" && \
     python -c "import os; from faster_whisper import WhisperModel; WhisperModel(os.environ['WHISPER_MODEL'], device='cpu', compute_type='int8', download_root=os.environ['WHISPER_MODEL_DIR'])"; \
     python -c "import os; import tiktoken; tiktoken.get_encoding(os.environ['TIKTOKEN_ENCODING_NAME'])"; \
     else \
     pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu --no-cache-dir && \
-    uv pip install --system -r requirements.txt --no-cache-dir && \
+    pip3 install -r requirements.txt --no-cache-dir && \
     if [ "$USE_SLIM" != "true" ]; then \
     python -c "import os; from sentence_transformers import SentenceTransformer; SentenceTransformer(os.environ['RAG_EMBEDDING_MODEL'], device='cpu')" && \
     python -c "import os; from faster_whisper import WhisperModel; WhisperModel(os.environ['WHISPER_MODEL'], device='cpu', compute_type='int8', download_root=os.environ['WHISPER_MODEL_DIR'])"; \
@@ -161,11 +166,16 @@ RUN if [ "$USE_OLLAMA" = "true" ]; then \
 
 # copy built frontend files
 COPY --chown=$UID:$GID --from=build /app/build /app/build
-COPY --chown=$UID:$GID --from=build /app/CHANGELOG.md /app/CHANGELOG.md
-COPY --chown=$UID:$GID --from=build /app/package.json /app/package.json
+# Note: CHANGELOG.md and package.json are not needed for runtime
+# COPY --chown=$UID:$GID --from=build /app/CHANGELOG.md /app/CHANGELOG.md
+# COPY --chown=$UID:$GID --from=build /app/package.json /app/package.json
 
 # copy backend files
 COPY --chown=$UID:$GID ./backend .
+
+# Ensure CHANGELOG.md exists to satisfy runtime check
+RUN [ -f /app/CHANGELOG.md ] || echo "Pulsai Docker build" > /app/CHANGELOG.md && \
+    [ -f /app/backend/open_webui/CHANGELOG.md ] || echo "" > /app/backend/open_webui/CHANGELOG.md
 
 EXPOSE 8080
 

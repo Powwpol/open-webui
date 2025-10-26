@@ -1,0 +1,123 @@
+# Pulsai MCP Servers Configuration Example
+# Copy this file to mcp-servers.yaml and configure your MCP servers
+
+mcp_servers:
+  # Example stdio MCP server
+  - id: "stdio-example"
+    name: "Python Tools (stdio)"
+    description: "MCP server running via stdio protocol"
+    protocol: "stdio"
+    enabled: false
+    config:
+      command: "python"
+      args: ["-m", "mcp_tools.server"]
+      env:
+        PYTHONPATH: "/app/tools"
+      cwd: null
+    tags: ["stdio", "python"]
+
+  # Example HTTP MCP server
+  - id: "http-example"
+    name: "HTTP MCP Server"
+    description: "MCP server accessible via HTTP"
+    protocol: "http"
+    enabled: false
+    config:
+      url: "http://localhost:8100"
+      auth_type: "bearer"
+      token: "${MCP_TOKEN}"  # Use environment variable
+      timeout: 30
+      max_retries: 3
+      retry_delay: 1.0
+      headers: {}
+    tags: ["http"]
+
+  # Example Docker MCP server
+  - id: "docker-example"
+    name: "Dockerized MCP"
+    description: "MCP server running in Docker container"
+    protocol: "docker"
+    enabled: false
+    config:
+      image: "pulsai/mcp-tools:latest"
+      ports:
+        "8100": "8100"
+      volumes: {}
+      environment:
+        MCP_LOG_LEVEL: "info"
+      auto_pull: true
+      auto_remove: true
+      mem_limit: "512m"
+      cpu_limit: 1.0
+      auth_type: "none"
+    tags: ["docker"]
+
+  # Example SSE MCP server
+  - id: "sse-example"
+    name: "SSE MCP Server"
+    description: "MCP server with Server-Sent Events"
+    protocol: "sse"
+    enabled: false
+    config:
+      url: "http://localhost:8200"
+      sse_endpoint: "/v1/sse"
+      reconnect_interval: 5
+      auth_type: "api_key"
+      token: "${MCP_API_KEY}"
+      timeout: 30
+    tags: ["sse", "streaming"]
+
+  # Example WebSocket MCP server
+  - id: "websocket-example"
+    name: "WebSocket MCP"
+    description: "MCP server with WebSocket protocol"
+    protocol: "websocket"
+    enabled: false
+    config:
+      url: "ws://localhost:8300"
+      auth_token: "${MCP_WS_TOKEN}"
+      ping_interval: 30
+      ping_timeout: 10
+      reconnect_interval: 5
+      max_reconnect_attempts: 5
+    tags: ["websocket", "realtime"]
+
+  # Pulsai Custom MCP Server (to be implemented)
+  - id: "pulsai-custom"
+    name: "Pulsai Custom MCP"
+    description: "Custom Pulsai MCP server with recursive chat and model tools"
+    protocol: "http"
+    enabled: false
+    config:
+      url: "http://localhost:8400"
+      auth_type: "bearer"
+      token: "${PULSAI_MCP_TOKEN}"
+      timeout: 60
+      max_retries: 3
+    tags: ["pulsai", "custom", "recursive"]
+
+# Configuration Tips:
+# 
+# 1. Use environment variables for sensitive data (tokens, passwords)
+#    - Format: ${VAR_NAME}
+#    - Set in .env file or system environment
+#
+# 2. Enable only the servers you need
+#    - Set enabled: true to activate
+#    - Disabled servers won't consume resources
+#
+# 3. Protocol-specific notes:
+#    - stdio: Requires command to be executable on system
+#    - docker: Requires Docker daemon running
+#    - http/https: Firewall/network access required
+#    - sse: Best for streaming responses
+#    - websocket: Best for bidirectional real-time
+#
+# 4. Health checks run every 60 seconds (configurable)
+#    - Automatic reconnection on failure
+#    - Circuit breaker prevents cascade failures
+#
+# 5. Hot-reload: Changes to this file are detected automatically
+#    - Check every 30 seconds (configurable)
+#    - No server restart required
+

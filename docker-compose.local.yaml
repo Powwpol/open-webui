@@ -1,0 +1,74 @@
+services:
+  # Service principal Open WebUI
+  open-webui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Désactiver CUDA et Ollama intégré pour simplifier
+        USE_CUDA: false
+        USE_OLLAMA: false
+        USE_SLIM: false
+        USE_PERMISSION_HARDENING: false
+        # Modèle d'embedding par défaut (léger)
+        USE_EMBEDDING_MODEL: sentence-transformers/all-MiniLM-L6-v2
+    container_name: open-webui-local
+    ports:
+      # Port local 3002 -> Port conteneur 8080 (3000/3001 étaient déjà utilisés)
+      - "3002:8080"
+    volumes:
+      # Persistence des données via un volume nommé
+      - open-webui-data:/app/backend/data
+    environment:
+      # Configuration de base
+      - PORT=8080
+      - HOST=0.0.0.0
+      - ENV=dev
+      
+      # Clé secrète (sera générée automatiquement si vide)
+      - WEBUI_SECRET_KEY=
+      
+      # URL de base pour Ollama (optionnel)
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      
+      # Désactiver les analytics
+      - SCARF_NO_ANALYTICS=true
+      - DO_NOT_TRACK=true
+      - ANONYMIZED_TELEMETRY=false
+      
+      # Configuration OpenAI (optionnel - remplacer par votre clé si nécessaire)
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL:-}
+      
+      # Logs détaillés pour le développement
+      - LOG_LEVEL=DEBUG
+      
+    # Options réseau pour accéder aux services locaux
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    
+    # Politique de redémarrage
+    restart: unless-stopped
+    
+    # Santé check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Service Ollama optionnel (décommenter si vous voulez Ollama)
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: ollama-local
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama-data:/root/.ollama
+  #   restart: unless-stopped
+
+# Volumes pour la persistance (optionnel)
+volumes:
+  # ollama-data:  # Décommenter si vous utilisez Ollama
+  open-webui-data:

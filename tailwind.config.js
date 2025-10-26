@@ -1,46 +1,66 @@
-import typography from '@tailwindcss/typography';
-import containerQueries from '@tailwindcss/container-queries';
-
 /** @type {import('tailwindcss').Config} */
 export default {
-	darkMode: 'class',
-	content: ['./src/**/*.{html,js,svelte,ts}'],
+    content: ['./src/**/*.{html,js,svelte,ts}'],
+	darkMode: 'selector',
 	theme: {
 		extend: {
-			colors: {
-				gray: {
-					50: 'var(--color-gray-50, #f9f9f9)',
-					100: 'var(--color-gray-100, #ececec)',
-					200: 'var(--color-gray-200, #e3e3e3)',
-					300: 'var(--color-gray-300, #cdcdcd)',
-					400: 'var(--color-gray-400, #b4b4b4)',
-					500: 'var(--color-gray-500, #9b9b9b)',
-					600: 'var(--color-gray-600, #676767)',
-					700: 'var(--color-gray-700, #4e4e4e)',
-					800: 'var(--color-gray-800, #333)',
-					850: 'var(--color-gray-850, #262626)',
-					900: 'var(--color-gray-900, #171717)',
-					950: 'var(--color-gray-950, #0d0d0d)'
-				}
+			// Pulsai Color Palette
+            colors: {
+				pulsai: {
+					'primary': '#FA4616',
+					'primary-light': '#FAC090',
+					'success': '#00B050',
+					'error': '#FF0000',
+					'info': '#2751E3',
+					'dark': '#000000',
+					'dark-2': '#EAEAEA',
+					'light': '#FFFFFF',
+					'light-2': '#F5F5F5',
+					'accent': '#43635A'
+                },
+                gray: {
+                    850: '#1f2937'
+                }
 			},
-			typography: {
-				DEFAULT: {
-					css: {
-						pre: false,
-						code: false,
-						'pre code': false,
-						'code::before': false,
-						'code::after': false
-					}
-				}
+			// Pulsai Font Sizes
+			fontSize: {
+				'nav': '18px',
+				'nav-sub': '15px',
+				'section': '20px'
 			},
-			padding: {
-				'safe-bottom': 'env(safe-area-inset-bottom)'
+			// ReactBits Animations
+			keyframes: {
+				gradient: {
+					'0%': { backgroundPosition: '0% 50%' },
+					'50%': { backgroundPosition: '100% 50%' },
+					'100%': { backgroundPosition: '0% 50%' },
+				},
+				'fade-in': {
+					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' },
+				},
+				'slide-in': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(0)' },
+				},
 			},
-			transitionProperty: {
-				width: 'width'
+			animation: {
+				'gradient': 'gradient 8s linear infinite',
+				'gradient-slow': 'gradient 12s linear infinite',
+				'gradient-fast': 'gradient 4s linear infinite',
+				'fade-in': 'fade-in 0.5s ease-out',
+				'slide-in': 'slide-in 0.3s ease-out',
+			},
+			// Custom Gradients
+			backgroundImage: {
+				'pulsai-gradient-orange': 'linear-gradient(135deg, #FA4616, #FAC090)',
+				'pulsai-gradient-blue-green': 'linear-gradient(135deg, #2751E3, #00B050)',
+				'pulsai-gradient-accent': 'linear-gradient(135deg, #43635A, #00B050)',
 			}
 		}
 	},
-	plugins: [typography, containerQueries]
+	plugins: [
+		require('@tailwindcss/typography'),
+		require('@tailwindcss/container-queries')
+	]
 };

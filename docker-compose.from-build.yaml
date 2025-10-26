@@ -1,0 +1,124 @@
+# Pulsai - Utilisant le build Open WebUI existant (xn3xof)
+# Integration avec les services Pulsai existants
+# Note: pulsai-ollama tourne déjà séparément
+
+services:
+  # ======================================
+  # Pulsai Backend (depuis build xn3xof)
+  # ======================================
+  pulsai-backend:
+    image: pulsai/backend:from-build
+    container_name: pulsai-backend-from-build
+    restart: unless-stopped
+    user: "0:0"  # Run as root to avoid permission issues
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - WEBUI_NAME=Pulsai
+      - ENV=production
+      - DATA_DIR=/data
+      
+      # Database
+      - DATABASE_URL=sqlite:////data/webui.db
+      
+      # Redis
+      - REDIS_URL=redis://pulsai-redis:6379/0
+      
+      # Ollama (déjà en cours sur pulsai-ollama)
+      - OLLAMA_BASE_URL=http://pulsai-ollama:11434
+      
+      # MCP Configuration
+      - MCP_CONFIG_PATH=/app/config/mcp-servers.yaml
+      
+      # Security
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-change-me-to-a-secure-secret}
+      
+      # Features
+      - ENABLE_SIGNUP=${ENABLE_SIGNUP:-true}
+      - ENABLE_WEBHOOKS=true
+      - ANONYMIZED_TELEMETRY=false
+      
+      # Logging
+      - LOG_LEVEL=INFO
+    
+    volumes:
+      # Mount sur /data au lieu de /app/backend/data pour éviter conflits
+      - ./pulsai-backend-data:/data
+      - ./config:/app/config:ro
+    
+    depends_on:
+      pulsai-redis:
+        condition: service_healthy
+    
+    networks:
+      - pulsai-network
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ======================================
+  # Pulsai Redis (Cache & Sessions)
+  # ======================================
+  pulsai-redis:
+    image: redis:7-alpine
+    container_name: pulsai-redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - pulsai-redis-data:/data
+    networks:
+      - pulsai-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # ======================================
+  # Pulsai MCP Server
+  # ======================================
+  pulsai-mcp:
+    image: pulsai/mcp:latest
+    container_name: pulsai-mcp
+    restart: unless-stopped
+    ports:
+      - "8001:8400"  # MCP runs on 8400 internally, map to 8001
+    environment:
+      - PORT=8400
+      - LOG_LEVEL=INFO
+      - PULSAI_BACKEND_URL=http://pulsai-backend:8080
+    networks:
+      - pulsai-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8400/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+# Note: pulsai-ollama est déjà en cours d'exécution séparément
+# Il sera accessible via le réseau pulsai-network
+
+# ======================================
+# Volumes
+# ======================================
+volumes:
+  pulsai-redis-data:
+    name: pulsai-redis-from-build-data
+
+# ======================================
+# Networks (utilise le réseau existant)
+# ======================================
+networks:
+  pulsai-network:
+    external: true
+    name: pulsai-network
+
+

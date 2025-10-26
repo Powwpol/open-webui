@@ -1,0 +1,103 @@
+# Version control
+.git/
+.gitignore
+.svn/
+.hg/
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+
+# Node.js artifacts
+node_modules/
+npm-debug.log
+yarn-debug.log
+
+# Build outputs
+build/
+dist/
+out/
+
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test files and directories
+test/
+tests/
+*_test.go
+*.test
+
+# Debug and log files
+debug/
+*.log
+
+# Environment and secrets
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.crt
+config.local.*
+*.local.yml
+
+# Temporary and local files
+tmp/
+temp/
+*.tmp
+.local/
+local/
+
+# Documentation and markdown
+docs/
+*.md
+README*
+
+# Docker files
+Dockerfile*
+docker-compose*
+
+# Project-specific
+cypress/
+
+# Miscellaneous
+*.bak
+
+# Exclude lock files explicitly (do NOT ignore)
+# (No lock files are ignored as per instructions)
+
+# Exclude build scripts
+scripts/
+
+# Exclude Kubernetes manifests
+kubernetes/
+
+# Exclude static assets not needed for build
+static/assets/emojis/
+static/assets/fonts/
+static/assets/images/
+static/audio/
+static/pyodide/
+static/static/
+static/themes/
+
+# Exclude test files in test_files
+/test/test_files/
+
+# Exclude backup dockerignore
+.dockerignore.bak
+
+# Exclude other config files
+.prettierignore
+.prettierrc
+.eslintignore
+.eslintrc.cjs
+.npmrc
+
+# End of .dockerignore
