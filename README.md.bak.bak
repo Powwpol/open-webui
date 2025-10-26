@@ -1,0 +1,57 @@
+## Running the Project with Docker
+
+This project provides Dockerfiles and a `docker-compose.yml` for easy setup of the backend (Python), frontend (SvelteKit/TypeScript), and required services (PostgreSQL, Redis).
+
+### Project-Specific Requirements
+
+- **Backend**: Python 3.13 (from `python:3.13-slim`)
+- **Frontend**: Node.js 22.13.1 (from `node:22.13.1-slim`)
+- **Database**: PostgreSQL (default user/password/db: `webui`)
+- **Cache**: Redis
+
+### Environment Variables
+
+- Backend and frontend can use `.env` files for configuration (see `.env.example` in the backend directory).
+- PostgreSQL uses the following defaults (can be overridden in the compose file):
+  - `POSTGRES_USER=webui`
+  - `POSTGRES_PASSWORD=webui`
+  - `POSTGRES_DB=webui`
+
+### Build and Run Instructions
+
+1. **Build and start all services:**
+
+   ```sh
+   docker compose up --build
+   ```
+
+   This will build and start:
+   - `python-backend` (backend API)
+   - `typescript-src` (frontend web UI)
+   - `postgres` (database)
+   - `redis` (cache)
+
+2. **Access the services:**
+   - **Frontend (SvelteKit):** http://localhost:3000
+   - **Backend (API):** http://localhost:8080
+
+### Ports Exposed
+
+- **Frontend (typescript-src):** `3000` (mapped to host `3000`)
+- **Backend (python-backend):** `8080` (mapped to host `8080`)
+- **Postgres:** not exposed to host by default
+- **Redis:** not exposed to host by default
+
+### Special Configuration
+
+- The backend and frontend run as a non-root user (`webuiuser`) for security.
+- The backend uses a Python virtual environment located at `/app/.venv`.
+- The frontend uses SvelteKit's `preview` command for production.
+- If you want to persist database/cache data, uncomment the `volumes` section in the compose file.
+- To customize environment variables, copy `.env.example` to `.env` in the backend directory and adjust as needed.
+
+### Notes
+
+- The Dockerfiles and compose file are tailored for this project structure and dependencies.
+- Healthchecks are configured for Redis and Postgres to ensure service readiness.
+- If you need to override ports or environment variables, edit the `docker-compose.yml` accordingly.

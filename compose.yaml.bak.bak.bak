@@ -1,0 +1,75 @@
+services:
+  python-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: python-backend
+    restart: unless-stopped
+    init: true
+    # env_file: ./backend/.env  # Uncomment if .env file exists
+    expose:
+      - "8080"  # Backend service port (from Dockerfile EXPOSE)
+    networks:
+      - webui-net
+    depends_on:
+      - redis
+      - postgres
+    # Add volumes here if persistent data is needed (e.g., for uploads)
+
+  typescript-src:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    container_name: typescript-src
+    restart: unless-stopped
+    init: true
+    # env_file: ./src/.env  # Uncomment if .env file exists
+    expose:
+      - "3000"  # SvelteKit frontend port (from Dockerfile EXPOSE)
+    networks:
+      - webui-net
+    depends_on:
+      - python-backend
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - webui-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Uncomment the following to persist Redis data
+    # volumes:
+    #   - redis-data:/data
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: webui
+      POSTGRES_PASSWORD: webui
+      POSTGRES_DB: webui
+    networks:
+      - webui-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webui"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Uncomment the following to persist Postgres data
+    # volumes:
+    #   - postgres-data:/var/lib/postgresql/data
+
+networks:
+  webui-net:
+    driver: bridge
+
+# Uncomment the following if you want to persist Redis/Postgres data
+#volumes:
+#  redis-data:
+#  postgres-data:

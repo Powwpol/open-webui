@@ -73,8 +73,8 @@
 							{#each Object.keys(changelog[version]).filter((section) => section !== 'date') as section}
 								<div class="w-full">
 									<div
-										class="font-semibold uppercase text-xs {section === 'added'
-											? 'bg-blue-500/20 text-blue-700 dark:text-blue-200'
+								class="font-semibold uppercase text-xs {section === 'added'
+									? 'bg-[#FF6A00]/20 text-[#FF6A00] dark:text-orange-200'
 											: section === 'fixed'
 												? 'bg-green-500/20 text-green-700 dark:text-green-200'
 												: section === 'changed'

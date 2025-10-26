@@ -1,0 +1,43 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: pulsai
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - secrets.yaml
+  - postgres-statefulset.yaml
+  - redis-deployment.yaml
+  - backend-deployment.yaml
+  - frontend-deployment.yaml
+  - ollama-statefulset.yaml
+  - chroma-deployment.yaml
+  - ingress.yaml
+  - hpa.yaml
+  - network-policies.yaml
+
+# Images can be customized per environment
+images:
+  - name: pulsai/backend
+    newTag: latest
+  - name: pulsai/frontend
+    newTag: latest
+
+# ConfigMap generator (optional)
+configMapGenerator:
+  - name: pulsai-mcp-config
+    files:
+      - mcp-servers.yaml=../../config/mcp-servers.yaml.example
+
+# Labels applied to all resources
+commonLabels:
+  app.kubernetes.io/name: pulsai
+  app.kubernetes.io/version: "1.0.0"
+  app.kubernetes.io/managed-by: kustomize
+
+# Annotations applied to all resources
+commonAnnotations:
+  pulsai.io/deployment-date: "2025-10-19"
+  pulsai.io/docs: "https://docs.pulsai.com"
+

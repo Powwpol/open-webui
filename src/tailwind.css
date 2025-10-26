@@ -42,13 +42,13 @@
 	}
 
 	input[type='checkbox'] {
-		@apply appearance-none size-3.5 align-middle bg-white border border-gray-300 rounded transition cursor-pointer focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-800 dark:border-gray-600 self-center;
+		@apply appearance-none size-3.5 align-middle bg-white border border-gray-300 rounded transition cursor-pointer focus:ring-2 focus:ring-[#FF6A00] focus:outline-none dark:bg-gray-800 dark:border-gray-600 self-center;
 		/* Center the custom mark */
 		display: inline-block;
 		position: relative;
 	}
 	input[type='checkbox']:checked {
-		@apply bg-blue-600 border-blue-600;
+		@apply bg-[#FF6A00] border-[#FF6A00];
 	}
 	input[type='checkbox']:after {
 		content: '';
@@ -72,3 +72,37 @@
 }
 
 @custom-variant hover (&:hover);
+
+@layer utilities {
+	/* Brand color: Orange #FF6A00 replacing previous black accents */
+	.bg-black {
+		--tw-bg-opacity: 1;
+		background-color: rgb(255 106 0 / var(--tw-bg-opacity)) !important;
+	}
+
+	/* Common translucent black utilities mapped to orange translucency */
+	.bg-black\/5 {
+		background-color: rgb(255 106 0 / 0.05) !important;
+	}
+	.bg-black\/10 {
+		background-color: rgb(255 106 0 / 0.1) !important;
+	}
+	.bg-black\/20 {
+		background-color: rgb(255 106 0 / 0.2) !important;
+	}
+
+	/* Hover states that previously used gray-900/950 to simulate darkening */
+	.hover\:bg-gray-900:hover {
+		--tw-bg-opacity: 1;
+		background-color: rgb(255 106 0 / 0.9) !important;
+	}
+	.hover\:bg-gray-950:hover {
+		--tw-bg-opacity: 1;
+		background-color: rgb(255 106 0 / 1) !important;
+	}
+
+	/* Hover translucent variant */
+	.hover\:bg-black\/5:hover {
+		background-color: rgb(255 106 0 / 0.05) !important;
+	}
+}

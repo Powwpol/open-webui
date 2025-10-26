@@ -1,0 +1,107 @@
+version: '3.8'
+
+# Pulsai Monolith - Tout dans UN seul conteneur
+# Plus simple, mais moins scalable
+
+services:
+  # ============================================
+  # Pulsai All-in-One (Frontend + Backend)
+  # ============================================
+  pulsai:
+    image: pulsai/monolith:latest
+    container_name: pulsai-monolith
+    ports:
+      - "3000:8080"  # Frontend + Backend sur le même port
+    volumes:
+      - pulsai-data:/app/backend/data
+      - ./config:/app/config:ro
+    environment:
+      # Backend
+      - ENV=production
+      - WEBUI_NAME=Pulsai
+      - DATA_DIR=/app/backend/data
+      
+      # Ollama connection
+      - OLLAMA_BASE_URL=http://pulsai-ollama:11434
+      
+      # Redis connection (optionnel)
+      - REDIS_URL=redis://pulsai-redis:6379/0
+      
+      # Security
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-changeme-secret-key-production}
+    depends_on:
+      pulsai-redis:
+        condition: service_healthy
+      pulsai-ollama:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - pulsai-network
+
+  # ============================================
+  # Redis (Cache & Sessions)
+  # ============================================
+  pulsai-redis:
+    image: redis:7-alpine
+    container_name: pulsai-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - pulsai-redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - pulsai-network
+
+  # ============================================
+  # Ollama (LLM Inference)
+  # ============================================
+  pulsai-ollama:
+    image: ollama/ollama:latest
+    container_name: pulsai-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - pulsai-ollama-data:/root/.ollama
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - pulsai-network
+    # Uncomment for GPU support
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+volumes:
+  pulsai-data:
+    name: pulsai-monolith-data
+  pulsai-redis-data:
+    name: pulsai-redis-data
+  pulsai-ollama-data:
+    name: pulsai-ollama-data
+
+networks:
+  pulsai-network:
+    name: pulsai-monolith-network
+    driver: bridge
+
+
+

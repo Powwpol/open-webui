@@ -1,0 +1,109 @@
+# Version control
+.git/
+.gitignore
+.svn/
+.hg/
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+*.bak
+
+# Node.js/TypeScript artifacts
+node_modules/
+npm-debug.log
+yarn-debug.log
+
+# Build outputs
+build/
+dist/
+out/
+
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test files and directories
+test/
+tests/
+*_test.go
+*.test
+
+# Debug and log files
+debug/
+*.log
+
+# Environment and secrets
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.crt
+config.local.*
+*.local.yml
+
+# Temporary and local files
+tmp/
+temp/
+*.tmp
+.local/
+local/
+
+# Documentation and markdown
+docs/
+*.md
+README*
+
+# Docker files
+Dockerfile*
+docker-compose*
+
+# Project-specific
+*.bak
+*.coverage
+
+# Miscellaneous
+*.class
+*.gradle/
+
+# Exclude lock files and build wrappers (do NOT ignore)
+# (Intentionally not ignoring *.lock, .mvnw, .gradlew, .mvn/, .gradle/)
+
+# Ignore backup dockerignore files
+.dockerignore.bak
+.dockerignore.bak.bak
+
+# Ignore Cypress test artifacts
+cypress/
+
+# Ignore Kubernetes manifests and Helm charts
+kubernetes/
+
+# Ignore scripts
+scripts/
+
+# Ignore frontend static assets not needed for build
+static/
+
+# Ignore backend data and test files
+backend/data/
+backend/test/
+
+# Ignore Svelte build artifacts (if any)
+.svelte-kit/
+
+# Ignore coverage reports
+coverage/
+
+# Ignore package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# End of .dockerignore

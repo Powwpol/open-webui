@@ -1,6 +1,6 @@
 [project]
-name = "open-webui"
-description = "Open WebUI"
+name = "pulsai"
+description = "Pulsai - AI Assistant Platform"
 authors = [
     { name = "Timothy Jaeryang Baek", email = "tim@openwebui.com" }
 ]
@@ -163,7 +163,7 @@ all = [
 ]
 
 [project.scripts]
-open-webui = "open_webui:app"
+pulsai = "open_webui:app"
 
 [build-system]
 requires = ["hatchling"]

@@ -1,0 +1,71 @@
+services:
+  python-backend:
+    build:
+      context: ./backend
+      dockerfile: ../backendDockerfile
+    restart: unless-stopped
+    init: true
+    ports:
+      - "8080:8080"  # Exposed by backendDockerfile
+    # env_file: ./backend/.env  # Uncomment if .env file exists
+    networks:
+      - webui-net
+    depends_on:
+      - redis
+      - postgres
+      # Add other external services here if needed
+
+  typescript-src:
+    build:
+      context: ./src
+      dockerfile: ../srcDockerfile
+    restart: unless-stopped
+    init: true
+    ports:
+      - "3000:3000"  # Exposed by srcDockerfile (SvelteKit default)
+    # env_file: ./src/.env  # Uncomment if .env file exists
+    networks:
+      - webui-net
+    depends_on:
+      - python-backend
+      # Add other external services here if needed
+
+  # External services detected from backend source code (retrieval/vector/dbs, test/util/test_redis.py, etc.)
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    networks:
+      - webui-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # volumes:
+    #   - redis-data:/data  # Uncomment for persistence
+
+  postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: webui
+      POSTGRES_PASSWORD: webui
+      POSTGRES_DB: webui
+    networks:
+      - webui-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webui"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # volumes:
+    #   - postgres-data:/var/lib/postgresql/data  # Uncomment for persistence
+
+networks:
+  webui-net:
+    driver: bridge
+
+# Uncomment the following volumes section if you want persistence for Redis/Postgres
+#volumes:
+#  redis-data:
+#  postgres-data:

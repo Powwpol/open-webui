@@ -1,20 +1,90 @@
-.github
+# Pulsai Docker Ignore
+
+# Node modules
+node_modules/
+npm-debug.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
 .DS_Store
-docs
-kubernetes
-node_modules
-/.svelte-kit
-/package
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Test
+test/
+tests/
+*.test.js
+*.spec.js
+cypress/
+coverage/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# Docker
+Dockerfile*
+docker-compose*.yaml
+docker-compose*.yml
+.dockerignore
+
+# Backend data (exclude from image)
+backend/data/
+backend/cache/
+
+# Build artifacts
+build/
+dist/
+.next/
+.nuxt/
+
+# Environment files
 .env
 .env.*
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
-__pycache__
-.idea
-venv
-_old
-uploads
-.ipynb_checkpoints
-**/*.db
-_test
-backend/data/*
+!.env.example
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# MCP Server (build separately)
+# mcp-server/
+
+# Kubernetes
+kubernetes/
+
+# Backup files
+*.bak
+*.backup

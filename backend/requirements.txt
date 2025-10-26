@@ -48,6 +48,10 @@ asgiref==3.8.1
 tiktoken
 mcp==1.14.1
 
+# MCP Protocol Support
+websockets==14.2
+pyyaml==6.0.2
+
 openai
 anthropic
 google-genai==1.38.0

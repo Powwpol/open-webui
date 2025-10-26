@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pulsai
+  labels:
+    name: pulsai
+    app: pulsai
+    environment: production
+

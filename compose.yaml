@@ -1,0 +1,75 @@
+services:
+  python-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    init: true
+    # env_file: ./backend/.env  # Uncomment if .env file exists
+    ports:
+      - "8080:8080"  # Exposed by backend Dockerfile
+    networks:
+      - webui-net
+    depends_on:
+      - redis
+      - postgres
+    # If you use other external services (Elasticsearch, etc.), add them to depends_on
+
+  typescript-src:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    init: true
+    # env_file: ./src/.env  # Uncomment if .env file exists
+    ports:
+      - "3000:3000"  # Exposed by src Dockerfile
+    networks:
+      - webui-net
+    depends_on:
+      - python-backend
+    # SvelteKit frontend depends on backend API
+
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    networks:
+      - webui-net
+    ports:
+      - "6379:6379"  # Only expose if you need to access Redis from host
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # volumes:
+    #   - redis-data:/data  # Uncomment for persistence
+
+  postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    networks:
+      - webui-net
+    environment:
+      POSTGRES_USER: webui
+      POSTGRES_PASSWORD: webui
+      POSTGRES_DB: webui
+    ports:
+      - "5432:5432"  # Only expose if you need to access Postgres from host
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webui"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # volumes:
+    #   - postgres-data:/var/lib/postgresql/data  # Uncomment for persistence
+
+# Networks for inter-service communication
+networks:
+  webui-net:
+    driver: bridge
+
+# Uncomment below if you want persistent storage for Redis/Postgres
+#volumes:
+#  redis-data:
+#  postgres-data:

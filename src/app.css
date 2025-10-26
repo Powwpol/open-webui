@@ -30,6 +30,52 @@
 	font-display: swap;
 }
 
+/* ====================================
+   Pulsai Custom CSS Variables
+   ==================================== */
+:root {
+	/* Pulsai Color Palette */
+	--pulsai-primary: #FA4616;
+	--pulsai-primary-light: #FAC090;
+	--pulsai-success: #00B050;
+	--pulsai-error: #FF0000;
+	--pulsai-info: #2751E3;
+	--pulsai-accent: #43635A;
+	--pulsai-dark: #000000;
+	--pulsai-dark-2: #EAEAEA;
+	--pulsai-light: #FFFFFF;
+	--pulsai-light-2: #F5F5F5;
+	
+	/* Pulsai Gradients */
+	--pulsai-gradient-orange: linear-gradient(135deg, #FA4616, #FAC090);
+	--pulsai-gradient-blue-green: linear-gradient(135deg, #2751E3, #00B050);
+	--pulsai-gradient-accent: linear-gradient(135deg, #43635A, #00B050);
+	--pulsai-gradient-full: linear-gradient(135deg, #FA4616, #FAC090, #2751E3, #43635A, #00B050);
+	
+	/* Iridescence Settings */
+	--pulsai-iridescence-opacity: 0;
+}
+
+.dark {
+	--pulsai-iridescence-opacity: 0.15;
+}
+
+/* Menu Font Sizes - Pulsai Typography */
+.nav-item {
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.nav-subitem {
+	font-size: 15px;
+	font-weight: 500;
+}
+
+.section-header {
+	font-size: 20px;
+	font-weight: 700;
+}
+
 html {
 	word-break: break-word;
 }
@@ -70,19 +116,19 @@ textarea::placeholder {
 }
 
 .input-prose {
-	@apply prose dark:prose-invert prose-headings:font-semibold prose-hr:my-4 prose-hr:border-gray-50 prose-hr:dark:border-gray-850 prose-p:my-1 prose-img:my-1 prose-headings:my-2 prose-pre:my-0 prose-table:my-1 prose-blockquote:my-0 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 whitespace-pre-line;
+    @apply prose dark:prose-invert prose-headings:font-semibold prose-hr:my-4 prose-hr:border-gray-50 dark:prose-hr:border-gray-850 prose-p:my-1 prose-img:my-1 prose-headings:my-2 prose-pre:my-0 prose-table:my-1 prose-blockquote:my-0 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 whitespace-pre-line;
 }
 
 .input-prose-sm {
-	@apply prose dark:prose-invert prose-headings:font-medium prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-hr:my-4 prose-hr:border-gray-50 prose-hr:dark:border-gray-850 prose-p:my-1 prose-img:my-1 prose-headings:my-2 prose-pre:my-0 prose-table:my-1 prose-blockquote:my-0 prose-ul:my-1 prose-ol:my-1 prose-li:my-1 whitespace-pre-line text-sm;
+    @apply prose dark:prose-invert prose-headings:font-medium prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-hr:my-4 prose-hr:border-gray-50 dark:prose-hr:border-gray-850 prose-p:my-1 prose-img:my-1 prose-headings:my-2 prose-pre:my-0 prose-table:my-1 prose-blockquote:my-0 prose-ul:my-1 prose-ol:my-1 prose-li:my-1 whitespace-pre-line text-sm;
 }
 
 .markdown-prose {
-	@apply prose dark:prose-invert prose-blockquote:border-s-gray-100 prose-blockquote:dark:border-gray-800 prose-blockquote:border-s-2 prose-blockquote:not-italic prose-blockquote:font-normal  prose-headings:font-semibold prose-hr:my-4 prose-hr:border-gray-50 prose-hr:dark:border-gray-850 prose-p:my-0 prose-img:my-1 prose-headings:my-1 prose-pre:my-0 prose-table:my-0 prose-blockquote:my-0 prose-ul:-my-0 prose-ol:-my-0 prose-li:-my-0 whitespace-pre-line;
+    @apply prose dark:prose-invert prose-blockquote:border-s-gray-100 dark:prose-blockquote:border-gray-800 prose-blockquote:border-s-2 prose-blockquote:not-italic prose-blockquote:font-normal  prose-headings:font-semibold prose-hr:my-4 prose-hr:border-gray-50 dark:prose-hr:border-gray-850 prose-p:my-0 prose-img:my-1 prose-headings:my-1 prose-pre:my-0 prose-table:my-0 prose-blockquote:my-0 prose-ul:-my-0 prose-ol:-my-0 prose-li:-my-0 whitespace-pre-line;
 }
 
 .markdown-prose-sm {
-	@apply text-sm prose dark:prose-invert prose-blockquote:border-s-gray-100 prose-blockquote:dark:border-gray-800 prose-blockquote:border-s-2 prose-blockquote:not-italic prose-blockquote:font-normal  prose-headings:font-semibold prose-hr:my-2  prose-hr:border-gray-50 prose-hr:dark:border-gray-850 prose-p:my-0 prose-img:my-1 prose-headings:my-1 prose-pre:my-0 prose-table:my-0 prose-blockquote:my-0 prose-ul:-my-0 prose-ol:-my-0 prose-li:-my-0 whitespace-pre-line;
+    @apply text-sm prose dark:prose-invert prose-blockquote:border-s-gray-100 dark:prose-blockquote:border-gray-800 prose-blockquote:border-s-2 prose-blockquote:not-italic prose-blockquote:font-normal  prose-headings:font-semibold prose-hr:my-2  prose-hr:border-gray-50 dark:prose-hr:border-gray-850 prose-p:my-0 prose-img:my-1 prose-headings:my-1 prose-pre:my-0 prose-table:my-0 prose-blockquote:my-0 prose-ul:-my-0 prose-ol:-my-0 prose-li:-my-0 whitespace-pre-line;
 }
 
 .markdown-prose-xs {
@@ -124,7 +170,7 @@ li p {
 
 /* Dark theme scrollbar styles */
 .dark ::-webkit-scrollbar-thumb {
-	background-color: rgba(67, 67, 67, 0.6); /* Darker color for dark theme */
+	background-color: rgba(255, 106, 0, 0.6);
 	border-color: rgba(0, 0, 0, var(--tw-border-opacity));
 }
 
@@ -634,7 +680,7 @@ input[type='number'] {
 	margin-right: -1px;
 	border-left: 1px solid black;
 	border-right: 1px solid black;
-	border-color: orange;
+    border-color: #FF6A00;
 	word-break: normal;
 	pointer-events: none;
 }
@@ -644,7 +690,7 @@ input[type='number'] {
 	top: -1.05em;
 	left: -1px;
 	font-size: 13px;
-	background-color: rgb(250, 129, 0);
+    background-color: #FF6A00;
 	user-select: none;
 	color: white;
 	padding-left: 2px;
