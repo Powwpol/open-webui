@@ -13,6 +13,8 @@ services:
     user: "0:0"  # Run as root to avoid permission issues
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     environment:
       - PORT=8080
       - WEBUI_NAME=Pulsai

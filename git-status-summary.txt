@@ -1,0 +1,14 @@
+ M compose.yaml
+ M docker-compose.from-build.yaml
+ M docker-compose.local-build.yaml
+ M docker-compose.monolith.yaml
+ M docker-compose.pulsai.yaml
+?? COMMIT-SUMMARY.md
+?? OAUTH-CONFIGURATION-SUMMARY.md
+?? OAUTH-DOCKER-GUIDE.md
+?? OAUTH-SETUP-SUCCESS.md
+?? QUICK-START-OAUTH.md
+?? README-OAUTH-READY.md
+?? START-HERE.md
+?? git-status-summary.txt
+?? validate-oauth-config.sh
