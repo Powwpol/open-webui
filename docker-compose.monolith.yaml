@@ -19,6 +19,8 @@ services:
       # Backend
       - ENV=production
       - WEBUI_NAME=Pulsai
+      # Public base URL used for OAuth redirects and links
+      - WEBUI_URL=http://localhost:3000
       - DATA_DIR=/app/backend/data
       
       # Ollama connection
@@ -29,6 +31,40 @@ services:
       
       # Security
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-changeme-secret-key-production}
+      # Cookie settings for local (HTTP) Docker usage
+      - WEBUI_AUTH_COOKIE_SAME_SITE=${WEBUI_AUTH_COOKIE_SAME_SITE:-lax}
+      - WEBUI_AUTH_COOKIE_SECURE=${WEBUI_AUTH_COOKIE_SECURE:-false}
+
+      # ============================
+      # OAuth / OIDC configuration
+      # Enable ONE of the providers below by supplying values
+      # Generic OIDC (Keycloak/Okta/Auth0/Azure Entra ID, etc.)
+      - OPENID_PROVIDER_URL=${OPENID_PROVIDER_URL:-}
+      - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID:-}
+      - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET:-}
+      - OAUTH_SCOPES=${OAUTH_SCOPES:-openid email profile}
+      - OAUTH_PROVIDER_NAME=${OAUTH_PROVIDER_NAME:-SSO}
+      # Optional: restrict allowed email domains (comma-separated). Use * to allow all
+      - OAUTH_ALLOWED_DOMAINS=${OAUTH_ALLOWED_DOMAINS:-*}
+      # Optional: allow creating users from OAuth
+      - ENABLE_OAUTH_SIGNUP=${ENABLE_OAUTH_SIGNUP:-true}
+      - OAUTH_MERGE_ACCOUNTS_BY_EMAIL=${OAUTH_MERGE_ACCOUNTS_BY_EMAIL:-false}
+
+      # Google OAuth (optional)
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
+      - GOOGLE_OAUTH_SCOPE=${GOOGLE_OAUTH_SCOPE:-openid email profile}
+
+      # Microsoft OAuth (optional)
+      - MICROSOFT_CLIENT_ID=${MICROSOFT_CLIENT_ID:-}
+      - MICROSOFT_CLIENT_SECRET=${MICROSOFT_CLIENT_SECRET:-}
+      - MICROSOFT_CLIENT_TENANT_ID=${MICROSOFT_CLIENT_TENANT_ID:-}
+      - MICROSOFT_OAUTH_SCOPE=${MICROSOFT_OAUTH_SCOPE:-openid email profile}
+
+      # GitHub OAuth (optional)
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID:-}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET:-}
+      - GITHUB_CLIENT_SCOPE=${GITHUB_CLIENT_SCOPE:-user:email}
     depends_on:
       pulsai-redis:
         condition: service_healthy
