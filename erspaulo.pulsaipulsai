@@ -1,0 +1,327 @@
+4b2d5e656 - 🎉 Rebranding complet: Open WebUI → Pulsai
+
+Author: Paulo <paulo@pulsai.local>
+Date: 26/10/2025 10:23
+
+ .dockerignore                                      |  104 [32m+[m[31m-[m
+ .dockerignore.bak                                  |   20 [32m+[m
+ .dockerignore.bak.bak                              |   90 [32m+[m
+ .dockerignore.bak.bak.bak                          |  103 [32m+[m
+ .dockerignore.bak.bak.bak.bak                      |  109 [32m+[m
+ BUILD-STATUS.md                                    |  236 [32m++[m
+ DOCKER_LOCAL_SETUP.md                              |  186 [32m++[m
+ DOCKER_PULSAI.md                                   |  606 [32m++++[m
+ Dockerfile                                         |   38 [32m+[m[31m-[m
+ FROM-BUILD-GUIDE.md                                |  230 [32m++[m
+ GITHUB-SETUP.md                                    |  468 [32m+++[m
+ INSTALLATION.md                                    |    4 [32m+[m[31m-[m
+ INTEGRATION-SUCCESS.md                             |  388 [32m+++[m
+ LOCALDEVREADME.md                                  |  430 [32m+++[m
+ Makefile                                           |  160 [32m+[m[31m-[m
+ Pulsai                                             |    1 [32m+[m
+ QUICK-ACCESS.md                                    |  168 [32m++[m
+ QUICK-START.md                                     |  228 [32m++[m
+ RAPPORT-COHERENCE-PULSAI.md                        |  441 [32m+++[m
+ README-DOCKER.md                                   |  266 [32m++[m
+ README-PULSAI.md                                   |  303 [32m++[m
+ README.md                                          |  463 [32m+[m[31m--[m
+ README.md.bak                                      |  270 [32m++[m
+ README.md.bak.bak                                  |   57 [32m+[m
+ README.md.bak.bak.bak                              |   56 [32m+[m
+ README.md.bak.bak.bak.bak                          |   64 [32m+[m
+ REBRANDING-REPORT.md                               |  331 [32m+++[m
+ SUCCESS-REPORT.md                                  |  322 [32m+++[m
+ TROUBLESHOOTING-DOCKER.md                          |  416 [32m+++[m
+ TROUBLESHOOTING.md                                 |   14 [32m+[m[31m-[m
+ XN3XOF-TO-PULSAI-README.md                         |  437 [32m+++[m
+ backend/Dockerfile                                 |   44 [32m+[m
+ backend/Dockerfile.bak                             |   45 [32m+[m
+ backend/Dockerfile.bak.bak                         |   44 [32m+[m
+ backend/Dockerfile.bak.bak.bak                     |   44 [32m+[m
+ backend/{open_webui => }/alembic.ini               |    0
+ backend/{open_webui => }/migrations/README         |    0
+ backend/{open_webui => }/migrations/env.py         |    0
+ backend/{open_webui => }/migrations/script.py.mako |    0
+ backend/{open_webui => }/migrations/util.py        |    0
+ .../versions/018012973d35_add_indexes.py           |    0
+ .../versions/1af9b942657b_migrate_tags.py          |    0
+ .../versions/242a2047eae0_update_chat_table.py     |    0
+ .../versions/3781e22d8b01_update_message_table.py  |    0
+ .../38d63c18f30f_add_oauth_session_table.py        |    0
+ .../versions/3ab32c4b8f59_update_tags.py           |    0
+ .../versions/3af16a1c9fb6_update_user_table.py     |    0
+ .../4ace53fd72c8_update_folder_table_datetime.py   |    0
+ .../versions/57c599a3cb57_add_channel_table.py     |    0
+ .../versions/6a39f3d8e55c_add_knowledge_table.py   |    0
+ .../versions/7826ab40b532_update_file_table.py     |    0
+ .../migrations/versions/7e5b5dc7342b_init.py       |    0
+ .../versions/922e7a387820_add_group_table.py       |    0
+ .../versions/9f0c9cd09105_add_note_table.py        |    0
+ ...c220713937_add_reply_to_id_column_to_message.py |    0
+ .../versions/af906e964978_add_feedback_table.py    |    0
+ .../versions/c0fbf31ca0db_update_file_table.py     |    0
+ .../c29facfe716b_update_file_table_path.py         |    0
+ .../versions/c69f45358db4_add_folder_table.py      |    0
+ .../versions/ca81bd47c050_add_config_table.py      |    0
+ .../d31026856c01_update_folder_table_data.py       |    0
+ backend/{open_webui => pulsai}/__init__.py         |    0
+ backend/pulsai/alembic.ini                         |  114 [32m+[m
+ backend/{open_webui => pulsai}/config.py           |    0
+ backend/{open_webui => pulsai}/constants.py        |    0
+ backend/{open_webui => pulsai}/data/readme.txt     |    0
+ backend/{open_webui => pulsai}/env.py              |    5 [32m+[m[31m-[m
+ backend/pulsai/finetuning/__init__.py              |    2 [32m+[m
+ backend/pulsai/finetuning/dataset_builder.py       |  328 [32m+++[m
+ backend/pulsai/finetuning/job_runner.py            |  395 [32m+++[m
+ backend/pulsai/finetuning/models.py                |  225 [32m++[m
+ backend/pulsai/finetuning/scheduler.py             |  326 [32m+++[m
+ backend/{open_webui => pulsai}/functions.py        |    0
+ backend/pulsai/inference/__init__.py               |   27 [32m+[m
+ backend/pulsai/inference/base.py                   |  153 [32m+[m
+ backend/pulsai/inference/health.py                 |  188 [32m++[m
+ backend/pulsai/inference/ollama_backend.py         |  225 [32m++[m
+ backend/pulsai/inference/router.py                 |  220 [32m++[m
+ backend/pulsai/inference/vllm_backend.py           |  247 [32m++[m
+ backend/{open_webui => pulsai}/internal/db.py      |    0
+ .../internal/migrations/001_initial_schema.py      |    0
+ .../internal/migrations/002_add_local_sharing.py   |    0
+ .../internal/migrations/003_add_auth_api_key.py    |    0
+ .../internal/migrations/004_add_archived.py        |    0
+ .../internal/migrations/005_add_updated_at.py      |    0
+ .../006_migrate_timestamps_and_charfields.py       |    0
+ .../migrations/007_add_user_last_active_at.py      |    0
+ .../internal/migrations/008_add_memory.py          |    0
+ .../internal/migrations/009_add_models.py          |    0
+ .../migrations/010_migrate_modelfiles_to_models.py |    0
+ .../internal/migrations/011_add_user_settings.py   |    0
+ .../internal/migrations/012_add_tools.py           |    0
+ .../internal/migrations/013_add_user_info.py       |    0
+ .../internal/migrations/014_add_files.py           |    0
+ .../internal/migrations/015_add_functions.py       |    0
+ .../migrations/016_add_valves_and_is_active.py     |    0
+ .../internal/migrations/017_add_user_oauth_sub.py  |    0
+ .../migrations/018_add_function_is_global.py       |    0
+ .../{open_webui => pulsai}/internal/wrappers.py    |    0
+ backend/{open_webui => pulsai}/main.py             |   29 [32m+[m[31m-[m
+ backend/pulsai/mcp/__init__.py                     |   26 [32m+[m
+ backend/pulsai/mcp/client.py                       |  159 [32m+[m
+ backend/pulsai/mcp/config.py                       |   34 [32m+[m
+ backend/pulsai/mcp/docker_transport.py             |  243 [32m++[m
+ backend/pulsai/mcp/http_transport.py               |  329 [32m+++[m
+ backend/pulsai/mcp/manager.py                      |  226 [32m++[m
+ backend/pulsai/mcp/protocols.py                    |  169 [32m++[m
+ backend/pulsai/mcp/registry.py                     |  259 [32m++[m
+ backend/pulsai/mcp/sse_transport.py                |  179 [32m++[m
+ backend/pulsai/mcp/stdio_transport.py              |  274 [32m++[m
+ backend/pulsai/mcp/validation.py                   |  118 [32m+[m
+ backend/pulsai/mcp/websocket_transport.py          |  335 [32m+++[m
+ backend/pulsai/migrations/README                   |    4 [32m+[m
+ backend/pulsai/migrations/env.py                   |  108 [32m+[m
+ backend/pulsai/migrations/script.py.mako           |   27 [32m+[m
+ backend/pulsai/migrations/util.py                  |   15 [32m+[m
+ .../versions/018012973d35_add_indexes.py           |   46 [32m+[m
+ .../versions/1af9b942657b_migrate_tags.py          |  151 [32m+[m
+ .../versions/242a2047eae0_update_chat_table.py     |  107 [32m+[m
+ .../versions/3781e22d8b01_update_message_table.py  |   70 [32m+[m
+ .../38d63c18f30f_add_oauth_session_table.py        |   52 [32m+[m
+ .../versions/3ab32c4b8f59_update_tags.py           |   81 [32m+[m
+ .../versions/3af16a1c9fb6_update_user_table.py     |   32 [32m+[m
+ .../4ace53fd72c8_update_folder_table_datetime.py   |   67 [32m+[m
+ .../versions/57c599a3cb57_add_channel_table.py     |   48 [32m+[m
+ .../versions/6a39f3d8e55c_add_knowledge_table.py   |   80 [32m+[m
+ .../versions/7826ab40b532_update_file_table.py     |   26 [32m+[m
+ .../migrations/versions/7e5b5dc7342b_init.py       |  204 [32m++[m
+ .../versions/922e7a387820_add_group_table.py       |   85 [32m+[m
+ .../versions/9f0c9cd09105_add_note_table.py        |   33 [32m+[m
+ ...c220713937_add_reply_to_id_column_to_message.py |   34 [32m+[m
+ .../versions/af906e964978_add_feedback_table.py    |   51 [32m+[m
+ .../versions/c0fbf31ca0db_update_file_table.py     |   32 [32m+[m
+ .../c29facfe716b_update_file_table_path.py         |   79 [32m+[m
+ .../versions/c69f45358db4_add_folder_table.py      |   50 [32m+[m
+ .../versions/ca81bd47c050_add_config_table.py      |   41 [32m+[m
+ .../d31026856c01_update_folder_table_data.py       |   23 [32m+[m
+ backend/{open_webui => pulsai}/models/auths.py     |    0
+ backend/{open_webui => pulsai}/models/channels.py  |    0
+ backend/{open_webui => pulsai}/models/chats.py     |    0
+ backend/{open_webui => pulsai}/models/feedbacks.py |    0
+ backend/{open_webui => pulsai}/models/files.py     |    0
+ backend/{open_webui => pulsai}/models/folders.py   |    0
+ backend/{open_webui => pulsai}/models/functions.py |    0
+ backend/{open_webui => pulsai}/models/groups.py    |    0
+ backend/{open_webui => pulsai}/models/knowledge.py |    0
+ backend/{open_webui => pulsai}/models/memories.py  |    0
+ backend/{open_webui => pulsai}/models/messages.py  |    0
+ backend/{open_webui => pulsai}/models/models.py    |    0
+ backend/{open_webui => pulsai}/models/notes.py     |    0
+ .../models/oauth_sessions.py                       |    0
+ backend/{open_webui => pulsai}/models/prompts.py   |    0
+ backend/{open_webui => pulsai}/models/tags.py      |    0
+ backend/{open_webui => pulsai}/models/tools.py     |    0
+ backend/{open_webui => pulsai}/models/users.py     |    0
+ backend/pulsai/quality/__init__.py                 |    2 [32m+[m
+ backend/pulsai/quality/models.py                   |  147 [32m+[m
+ backend/pulsai/quality/scorer.py                   |  401 [32m+++[m
+ backend/pulsai/recursive/__init__.py               |    2 [32m+[m
+ backend/pulsai/recursive/executor.py               |  485 [32m++++[m
+ backend/pulsai/recursive/models.py                 |  182 [32m++[m
+ backend/pulsai/recursive/tree.py                   |  298 [32m++[m
+ .../retrieval/loaders/datalab_marker.py            |    0
+ .../retrieval/loaders/external_document.py         |    0
+ .../retrieval/loaders/external_web.py              |    2 [32m+[m[31m-[m
+ .../retrieval/loaders/main.py                      |    0
+ .../retrieval/loaders/mistral.py                   |    0
+ .../retrieval/loaders/tavily.py                    |    0
+ .../retrieval/loaders/youtube.py                   |    0
+ .../retrieval/models/base_reranker.py              |    0
+ .../retrieval/models/colbert.py                    |    0
+ .../retrieval/models/external.py                   |    0
+ backend/{open_webui => pulsai}/retrieval/utils.py  |    0
+ .../retrieval/vector/dbs/chroma.py                 |    0
+ .../retrieval/vector/dbs/elasticsearch.py          |    0
+ .../retrieval/vector/dbs/milvus.py                 |    0
+ .../retrieval/vector/dbs/milvus_multitenancy.py    |    4 [32m+[m[31m-[m
+ .../retrieval/vector/dbs/opensearch.py             |    0
+ .../retrieval/vector/dbs/oracle23ai.py             |    0
+ .../retrieval/vector/dbs/pgvector.py               |    0
+ .../retrieval/vector/dbs/pinecone.py               |    0
+ .../retrieval/vector/dbs/qdrant.py                 |    0
+ .../retrieval/vector/dbs/qdrant_multitenancy.py    |    4 [32m+[m[31m-[m
+ .../retrieval/vector/dbs/s3vector.py               |    6 [32m+[m[31m-[m
+ .../retrieval/vector/factory.py                    |    0
+ .../retrieval/vector/main.py                       |    0
+ .../retrieval/vector/type.py                       |    0
+ .../retrieval/vector/utils.py                      |    0
+ .../{open_webui => pulsai}/retrieval/web/bing.py   |    0
+ .../{open_webui => pulsai}/retrieval/web/bocha.py  |    0
+ .../{open_webui => pulsai}/retrieval/web/brave.py  |    0
+ .../retrieval/web/duckduckgo.py                    |    0
+ .../{open_webui => pulsai}/retrieval/web/exa.py    |    0
+ .../retrieval/web/external.py                      |    2 [32m+[m[31m-[m
+ .../retrieval/web/firecrawl.py                     |    2 [32m+[m[31m-[m
+ .../retrieval/web/google_pse.py                    |    0
+ .../retrieval/web/jina_search.py                   |    0
+ .../{open_webui => pulsai}/retrieval/web/kagi.py   |    0
+ .../{open_webui => pulsai}/retrieval/web/main.py   |    0
+ .../{open_webui => pulsai}/retrieval/web/mojeek.py |    0
+ .../{open_webui => pulsai}/retrieval/web/ollama.py |    0
+ .../retrieval/web/perplexity.py                    |    0
+ .../retrieval/web/perplexity_search.py             |    0
+ .../retrieval/web/searchapi.py                     |    0
+ .../retrieval/web/searxng.py                       |    2 [32m+[m[31m-[m
+ .../retrieval/web/serpapi.py                       |    0
+ .../{open_webui => pulsai}/retrieval/web/serper.py |    0
+ .../{open_webui => pulsai}/retrieval/web/serply.py |    0
+ .../retrieval/web/serpstack.py                     |    0
+ .../{open_webui => pulsai}/retrieval/web/sougou.py |    0
+ .../{open_webui => pulsai}/retrieval/web/tavily.py |    0
+ .../retrieval/web/testdata/bing.json               |    0
+ .../retrieval/web/testdata/brave.json              |    0
+ .../retrieval/web/testdata/google_pse.json         |    0
+ .../retrieval/web/testdata/searchapi.json          |    0
+ .../retrieval/web/testdata/searxng.json            |    0
+ .../retrieval/web/testdata/serper.json             |    0
+ .../retrieval/web/testdata/serply.json             |    0
+ .../retrieval/web/testdata/serpstack.json          |    0
+ .../{open_webui => pulsai}/retrieval/web/utils.py  |    0
+ .../{open_webui => pulsai}/retrieval/web/yacy.py   |    2 [32m+[m[31m-[m
+ backend/{open_webui => pulsai}/routers/audio.py    |    6 [32m+[m[31m-[m
+ backend/{open_webui => pulsai}/routers/auths.py    |    0
+ backend/{open_webui => pulsai}/routers/channels.py |    0
+ backend/{open_webui => pulsai}/routers/chats.py    |    0
+ backend/{open_webui => pulsai}/routers/configs.py  |    0
+ .../{open_webui => pulsai}/routers/evaluations.py  |    0
+ backend/{open_webui => pulsai}/routers/files.py    |    0
+ backend/pulsai/routers/finetune.py                 |  493 [32m++++[m
+ backend/{open_webui => pulsai}/routers/folders.py  |    0
+ .../{open_webui => pulsai}/routers/functions.py    |    0
+ backend/{open_webui => pulsai}/routers/groups.py   |    0
+ backend/{open_webui => pulsai}/routers/images.py   |    0
+ backend/pulsai/routers/inference.py                |  303 [32m++[m
+ .../{open_webui => pulsai}/routers/knowledge.py    |    0
+ backend/pulsai/routers/mcp.py                      |  364 [32m+++[m
+ backend/{open_webui => pulsai}/routers/memories.py |    0
+ backend/{open_webui => pulsai}/routers/models.py   |    0
+ backend/{open_webui => pulsai}/routers/notes.py    |    0
+ backend/{open_webui => pulsai}/routers/ollama.py   |   22 [32m+[m[31m-[m
+ backend/{open_webui => pulsai}/routers/openai.py   |   16 [32m+[m[31m-[m
+ .../{open_webui => pulsai}/routers/pipelines.py    |    0
+ backend/{open_webui => pulsai}/routers/prompts.py  |    0
+ backend/pulsai/routers/quality.py                  |  273 [32m++[m
+ backend/pulsai/routers/recursive.py                |  543 [32m++++[m
+ .../{open_webui => pulsai}/routers/retrieval.py    |    0
+ backend/{open_webui => pulsai}/routers/scim.py     |    2 [32m+[m[31m-[m
+ backend/{open_webui => pulsai}/routers/tasks.py    |    0
+ backend/{open_webui => pulsai}/routers/tools.py    |    0
+ backend/{open_webui => pulsai}/routers/users.py    |    0
+ backend/{open_webui => pulsai}/routers/utils.py    |    0
+ backend/pulsai/routers/webhooks.py                 |  285 [32m++[m
+ backend/{open_webui => pulsai}/socket/main.py      |    0
+ backend/{open_webui => pulsai}/socket/utils.py     |    0
+ .../static/apple-touch-icon.png                    |  Bin
+ .../static/assets/pdf-style.css                    |    0
+ backend/{open_webui => pulsai}/static/custom.css   |    0
+ .../static/favicon-96x96.png                       |  Bin
+ .../{open_webui => pulsai}/static/favicon-dark.png |  Bin
+ backend/{open_webui => pulsai}/static/favicon.ico  |  Bin
+ backend/{open_webui => pulsai}/static/favicon.png  |  Bin
+ backend/{open_webui => pulsai}/static/favicon.svg  |    0
+ .../static/fonts/NotoSans-Bold.ttf                 |  Bin
+ .../static/fonts/NotoSans-Italic.ttf               |  Bin
+ .../static/fonts/NotoSans-Regular.ttf              |  Bin
+ .../static/fonts/NotoSans-Variable.ttf             |  Bin
+ .../static/fonts/NotoSansJP-Regular.ttf            |  Bin
+ .../static/fonts/NotoSansJP-Variable.ttf           |  Bin
+ .../static/fonts/NotoSansKR-Regular.ttf            |  Bin
+ .../static/fonts/NotoSansKR-Variable.ttf           |  Bin
+ .../static/fonts/NotoSansSC-Regular.ttf            |  Bin
+ .../static/fonts/NotoSansSC-Variable.ttf           |  Bin
+ .../static/fonts/Twemoji.ttf                       |  Bin
+ backend/{open_webui => pulsai}/static/loader.js    |    0
+ backend/{open_webui => pulsai}/static/logo.png     |  Bin
+ .../{open_webui => pulsai}/static/site.webmanifest |    4 [32m+[m[31m-[m
+ .../{open_webui => pulsai}/static/splash-dark.png  |  Bin
+ backend/{open_webui => pulsai}/static/splash.png   |  Bin
+ .../static/swagger-ui/favicon.png                  |  Bin
+ .../static/swagger-ui/swagger-ui-bundle.js         |    0
+ .../static/swagger-ui/swagger-ui.css               |    0
+ .../{open_webui => pulsai}/static/user-import.csv  |    0
+ backend/{open_webui => pulsai}/static/user.png     |  Bin
+ .../static/web-app-manifest-192x192.png            |  Bin
+ .../static/web-app-manifest-512x512.png            |  Bin
+ backend/{open_webui => pulsai}/storage/provider.py |    0
+ backend/{open_webui => pulsai}/tasks.py            |    0
+ backend/{open_webui => pulsai}/test/__init__.py    |    0
+ .../test/apps/webui/routers/test_auths.py          |    0
+ .../test/apps/webui/routers/test_chats.py          |    0
+ .../test/apps/webui/routers/test_models.py         |    0
+ .../test/apps/webui/routers/test_prompts.py        |    0
+ .../test/apps/webui/routers/test_users.py          |    0
+ .../test/apps/webui/storage/test_provider.py       |    0
+ .../test/util/abstract_integration_test.py         |    0
+ .../{open_webui => pulsai}/test/util/mock_user.py  |    0
+ .../{open_webui => pulsai}/test/util/test_redis.py |    0
+ .../{open_webui => pulsai}/utils/access_control.py |    0
+ backend/{open_webui => pulsai}/utils/audit.py      |    0
+ backend/{open_webui => pulsai}/utils/auth.py       |    0
+ backend/{open_webui => pulsai}/utils/channels.py   |    0
+ backend/{open_webui => pulsai}/utils/chat.py       |    0
+ .../utils/code_interpreter.py                      |    0
+ backend/{open_webui => pulsai}/utils/embeddings.py |    0
+ backend/{open_webui => pulsai}/utils/files.py      |    0
+ backend/{open_webui => pulsai}/utils/filter.py     |    0
+ .../{open_webui => pulsai}/utils/images/comfyui.py |    0
+ backend/{open_webui => pulsai}/utils/logger.py     |    0
+ backend/{open_webui => pulsai}/utils/mcp/client.py |    0
+ backend/{open_webui => pulsai}/utils/middleware.py |    0
+ backend/{open_webui => pulsai}/utils/misc.py       |    0
+ backend/{open_webui => pulsai}/utils/models.py     |    0
+ backend/{open_webui => pulsai}/utils/oauth.py      |    2 [32m+[m[31m-[m
+ backend/{open_webui => pulsai}/utils/payload.py    |    0
+ .../{open_webui => pulsai}/utils/pdf_generator.py  |    0
+ backend/{open_webui => pulsai}/utils/plugin.py     |    0
+ backend/{open_webui => pulsai}/utils/redis.py      |    0
+ backend/{open_webui => pulsai}/utils/response.py   |    0
+ .../utils/security_headers.py                      |    0
+ backend/{open_webui => pulsai}/utils/task.py       |    0
+ .../utils/telemetry/__init__.py                    |    0
+ .../utils/telemetry/const

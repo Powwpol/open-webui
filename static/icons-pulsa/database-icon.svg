@@ -1,0 +1,36 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="gradient-blue1" x1="15" y1="15" x2="65" y2="29" gradientUnits="userSpaceOnUse">
+<stop stopColor="#2751E3"/>
+<stop offset="1" stopColor="#1a3db0"/>
+</linearGradient>
+<linearGradient id="gradient-blue2" x1="15" y1="33" x2="65" y2="47" gradientUnits="userSpaceOnUse">
+<stop stopColor="#2751E3"/>
+<stop offset="1" stopColor="#1a3db0"/>
+</linearGradient>
+<linearGradient id="gradient-blue3" x1="15" y1="51" x2="65" y2="65" gradientUnits="userSpaceOnUse">
+<stop stopColor="#2751E3"/>
+<stop offset="1" stopColor="#1a3db0"/>
+</linearGradient>
+<filter id="shadow1">
+<feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#2751E3" floodOpacity="0.3"/>
+</filter>
+</defs>
+<g filter="url(#shadow1)">
+<rect x="15" y="15" width="50" height="14" rx="7" fill="url(#gradient-blue1)"/>
+<rect x="15" y="15" width="50" height="3" rx="1.5" fill="#2751E3" opacity="0.3"/>
+<circle cx="22" cy="22" r="2" fill="#FFFFFF" opacity="0.7"/>
+<circle cx="28" cy="22" r="2" fill="#FAC090" opacity="0.7"/>
+</g>
+<g filter="url(#shadow1)">
+<rect x="15" y="33" width="50" height="14" rx="7" fill="url(#gradient-blue2)"/>
+<circle cx="22" cy="40" r="2" fill="#FFFFFF" opacity="0.7"/>
+<circle cx="28" cy="40" r="2" fill="#FAC090" opacity="0.7"/>
+</g>
+<g filter="url(#shadow1)">
+<rect x="15" y="51" width="50" height="14" rx="7" fill="url(#gradient-blue3)"/>
+<circle cx="22" cy="58" r="2" fill="#FFFFFF" opacity="0.7"/>
+<circle cx="28" cy="58" r="2" fill="#FAC090" opacity="0.7"/>
+</g>
+</svg>
+
