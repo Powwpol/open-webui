@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic Data & IA - Pulsa Conseil</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ========================================
+   PALETTE PULSA (COULEURS OFFICIELLES)
+   ======================================== */
+:root {
+  --noir: #000000;
+  --blanc: #FFFFFF;
+  --gris-fonce: #EAEAEA;
+  --gris-clair: #F5F5F5;
+  --orange-fonce: #FA4616;
+  --orange-clair: #FAC090;
+  --vert: #00B050;
+  --rouge: #FF0000;
+  --vert-fonce: #43635A;
+  --bleu-fonce: #2751E3;
+  
+  /* Dégradés */
+  --gradient-orange: linear-gradient(135deg, #FA4616 0%, #FAC090 100%);
+  --gradient-dark: linear-gradient(135deg, #000000 0%, #43635A 100%);
+  --gradient-vert: linear-gradient(135deg, #00B050 0%, #43635A 100%);
+  --gradient-bleu: linear-gradient(135deg, #2751E3 0%, #00B050 100%);
+  
+  /* Ombres */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --shadow-orange: 0 8px 24px rgba(250, 70, 22, 0.25);
+  --shadow-vert: 0 8px 24px rgba(0, 176, 80, 0.25);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--blanc);
+  color: var(--noir);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ========================================
+   CANVAS EFFETS CLICK SPARK
+   ======================================== */
+#spark-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ========================================
+   NAVIGATION
+   ======================================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 20px 60px;
+  box-shadow: var(--shadow-sm);
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+  padding: 15px 60px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: var(--shadow-md);
+}
+
+.logo {
+  font-size: 32px;
+  font-weight: 900;
+  background: var(--gradient-orange);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -1px;
+  cursor: pointer;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: var(--noir);
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--gradient-orange);
+  transition: width 0.3s ease;
+}
+
+.nav-menu a:hover::after {
+  width: 100%;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--gradient-orange);
+  color: var(--blanc);
+  box-shadow: var(--shadow-orange);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(250, 70, 22, 0.35);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--noir);
+  border: 2px solid var(--gris-fonce);
+}
+
+.btn-secondary:hover {
+  border-color: var(--orange-fonce);
+  color: var(--orange-fonce);
+}
+
+/* ========================================
+   HERO / COVER
+   ======================================== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-dark);
+  padding: 120px 60px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 20% 30%, rgba(250, 70, 22, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(0, 176, 80, 0.15) 0%, transparent 50%);
+  animation: aurora-move 15s ease-in-out infinite;
+}
+
+@keyframes aurora-move {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(-20%, 10%) rotate(120deg); }
+  66% { transform: translate(20%, -10%) rotate(240deg); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 1000px;
+}
+
+.hero-logo {
+  font-size: 64px;
+  font-weight: 900;
+  background: var(--gradient-orange);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 40px;
+  letter-spacing: -2px;
+}
+
+.hero-title {
+  font-size: 72px;
+  font-weight: 900;
+  color: var(--blanc);
+  margin-bottom: 30px;
+  line-height: 1.1;
+  letter-spacing: -2px;
+}
+
+.hero-subtitle {
+  font-size: 28px;
+  color: var(--blanc);
+  opacity: 0.9;
+  margin-bottom: 40px;
+  font-weight: 400;
+}
+
+.hero-client {
+  font-size: 56px;
+  font-weight: 800;
+  background: var(--gradient-orange);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 40px 0;
+  padding: 20px 40px;
+  border: 3px solid rgba(250, 70, 22, 0.3);
+  border-radius: 16px;
+  display: inline-block;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+  margin-top: 50px;
+  color: var(--blanc);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.meta-label {
+  font-size: 13px;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.meta-value {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+  40% { transform: translateX(-50%) translateY(-10px); }
+  60% { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* ========================================
+   SECTIONS
+   ======================================== */
+.section {
+  padding: 100px 60px;
+  position: relative;
+}
+
+.section.light {
+  background: var(--blanc);
+}
+
+.section.dark {
+  background: var(--gris-clair);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 80px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-tag {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--orange-fonce);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+}
+
+.section-title {
+  font-size: 56px;
+  font-weight: 900;
+  color: var(--noir);
+  margin-bottom: 20px;
+  letter-spacing: -1.5px;
+}
+
+.section-subtitle {
+  font-size: 20px;
+  color: var(--noir);
+  opacity: 0.7;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   PRÉSENTATION ENTREPRISE
+   ======================================== */
+.entreprise-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 60px;
+}
+
+.entreprise-card {
+  background: var(--blanc);
+  padding: 50px;
+  border-radius: 24px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.entreprise-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: var(--gradient-orange);
+}
+
+.entreprise-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-icon {
+  font-size: 56px;
+  margin-bottom: 25px;
+}
+
+.card-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--noir);
+  margin-bottom: 20px;
+}
+
+.card-content {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--noir);
+  opacity: 0.8;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-top: 60px;
+}
+
+.stat-card {
+  background: var(--gradient-orange);
+  color: var(--blanc);
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: var(--shadow-orange);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 16px 40px rgba(250, 70, 22, 0.35);
+}
+
+.stat-value {
+  font-size: 52px;
+  font-weight: 900;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.stat-label {
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+/* ========================================
+   PROBLÉMATIQUES
+   ======================================== */
+.problemes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 60px;
+}
+
+.probleme-card {
+  background: var(--blanc);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  border-left: 5px solid var(--rouge);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.probleme-card:hover {
+  transform: translateX(10px);
+  box-shadow: var(--shadow-lg);
+  border-left-color: var(--orange-fonce);
+}
+
+.probleme-number {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  background: var(--gradient-orange);
+  color: var(--blanc);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  box-shadow: var(--shadow-orange);
+}
+
+.probleme-text {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--noir);
+  padding-right: 60px;
+}
+
+/* ========================================
+   SERVICES & CAS D'USAGE (INTERACTIF)
+   ======================================== */
+.services-container {
+  margin-top: 60px;
+}
+
+.service-block {
+  background: var(--blanc);
+  border-radius: 24px;
+  padding: 50px;
+  margin-bottom: 40px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.service-header {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 3px solid var(--gris-fonce);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.service-header:hover {
+  border-bottom-color: var(--orange-fonce);
+}
+
+.service-icon-large {
+  font-size: 64px;
+  min-width: 80px;
+}
+
+.service-info {
+  flex: 1;
+}
+
+.service-name {
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--noir);
+  margin-bottom: 10px;
+}
+
+.service-description {
+  font-size: 18px;
+  color: var(--noir);
+  opacity: 0.7;
+}
+
+.toggle-icon {
+  font-size: 32px;
+  color: var(--orange-fonce);
+  transition: transform 0.3s ease;
+}
+
+.service-header.active .toggle-icon {
+  transform: rotate(180deg);
+}
+
+.cas-usage-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+.cas-usage-list.active {
+  max-height: 3000px;
+  opacity: 1;
+}
+
+.cas-usage-card {
+  background: var(--gris-clair);
+  padding: 35px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.cas-usage-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(-45deg, transparent 40%, rgba(250, 70, 22, 0.1) 50%, transparent 60%);
+  background-size: 250% 250%;
+  background-position: -100% -100%;
+  transition: background-position 650ms ease;
+  pointer-events: none;
+}
+
+.cas-usage-card:hover::before {
+  background-position: 100% 100%;
+}
+
+.cas-usage-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--orange-fonce);
+  box-shadow: var(--shadow-lg);
+  background: var(--blanc);
+}
+
+.cas-usage-tag {
+  display: inline-block;
+  padding: 6px 14px;
+  background: var(--gradient-orange);
+  color: var(--blanc);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+}
+
+.cas-usage-titre {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--noir);
+  margin-bottom: 15px;
+  line-height: 1.3;
+}
+
+.cas-usage-resume {
+  font-size: 16px;
+  color: var(--noir);
+  opacity: 0.8;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.cas-usage-meta {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.badge.roi {
+  background: var(--gradient-vert);
+  color: var(--blanc);
+}
+
+.badge.cout {
+  background: var(--gradient-bleu);
+  color: var(--blanc);
+}
+
+.badge.delai {
+  background: rgba(250, 70, 22, 0.15);
+  color: var(--orange-fonce);
+}
+
+/* ========================================
+   MODAL CAS D'USAGE DÉTAILLÉ
+   ======================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  background: var(--blanc);
+  border-radius: 24px;
+  max-width: 1200px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.4s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  background: var(--gradient-orange);
+  color: var(--blanc);
+  padding: 50px;
+  border-radius: 24px 24px 0 0;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  color: var(--blanc);
+  font-size: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg) scale(1.1);
+}
+
+.modal-title {
+  font-size: 40px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.modal-contexte {
+  font-size: 18px;
+  line-height: 1.8;
+  opacity: 0.95;
+}
+
+.modal-body {
+  padding: 50px;
+}
+
+.solutions-section {
+  margin-bottom: 50px;
+}
+
+.solution-block {
+  background: var(--gris-clair);
+  padding: 35px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+  border-left: 5px solid var(--orange-fonce);
+}
+
+.solution-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--noir);
+  margin-bottom: 15px;
+}
+
+.solution-description {
+  font-size: 17px;
+  color: var(--noir);
+  opacity: 0.8;
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
+
+.solution-list {
+  list-style: none;
+  margin-left: 0;
+}
+
+.solution-list li {
+  padding: 10px 0 10px 30px;
+  position: relative;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.solution-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--orange-fonce);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.couts-gains {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin: 50px 0;
+}
+
+.cout-box, .gain-box {
+  padding: 40px;
+  border-radius: 20px;
+  color: var(--blanc);
+}
+
+.cout-box {
+  background: var(--gradient-bleu);
+  box-shadow: 0 8px 24px rgba(39, 81, 227, 0.25);
+}
+
+.gain-box {
+  background: var(--gradient-vert);
+  box-shadow: var(--shadow-vert);
+}
+
+.box-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.box-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.box-content {
+  font-size: 16px;
+  line-height: 2;
+}
+
+.mise-en-oeuvre {
+  margin-top: 50px;
+}
+
+.mise-en-oeuvre-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--noir);
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 3px solid var(--orange-fonce);
+}
+
+.etapes-list {
+  display: grid;
+  gap: 25px;
+}
+
+.etape-card {
+  background: var(--gris-clair);
+  padding: 35px;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.etape-card:hover {
+  border-color: var(--orange-fonce);
+  background: var(--blanc);
+  box-shadow: var(--shadow-md);
+}
+
+/* ========================================
+   BOUTONS FLOTTANTS
+   ======================================== */
+.floating-actions {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 999;
+}
+
+.action-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--gradient-orange);
+  color: var(--blanc);
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: var(--shadow-orange);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn:hover {
+  transform: scale(1.15) rotate(10deg);
+  box-shadow: 0 12px 32px rgba(250, 70, 22, 0.4);
+}
+
+/* ========================================
+   EDITABLE
+   ======================================== */
+[contenteditable="true"] {
+  outline: 2px dashed transparent;
+  transition: all 0.3s ease;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: text;
+}
+
+[contenteditable="true"]:hover {
+  outline-color: var(--orange-clair);
+  background: rgba(250, 192, 144, 0.1);
+}
+
+[contenteditable="true"]:focus {
+  outline-color: var(--orange-fonce);
+  background: rgba(250, 70, 22, 0.05);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  .hero-title { font-size: 42px; }
+  .section-title { font-size: 36px; }
+  .entreprise-grid { grid-template-columns: 1fr; }
+  .problemes-grid { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .couts-gains { grid-template-columns: 1fr; }
+  .navbar { padding: 15px 30px; }
+  .section { padding: 60px 30px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Canvas pour effets Click Spark -->
+<canvas id="spark-canvas"></canvas>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="logo">PULSA</div>
+  <ul class="nav-menu">
+    <li><a href="#presentation">Présentation</a></li>
+    <li><a href="#problematique">Problématique</a></li>
+    <li><a href="#cadre">Cadre</a></li>
+    <li><a href="#solutions">Solutions</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn btn-secondary" onclick="toggleEditMode()">✏️ Éditer</button>
+    <button class="btn btn-primary" onclick="window.print()">🖨️ PDF</button>
+  </div>
+</nav>
+
+<!-- Boutons flottants -->
+<div class="floating-actions">
+  <button class="action-btn" onclick="saveContent()" title="Sauvegarder">💾</button>
+  <button class="action-btn" onclick="scrollToTop()" title="Haut de page">⬆️</button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-logo" contenteditable="true">PULSA</div>
+    <h1 class="hero-title" contenteditable="true">Diagnostic Data & IA</h1>
+    <p class="hero-subtitle" contenteditable="true">Analyse approfondie et plan de transformation digitale</p>
+    <div class="hero-client" contenteditable="true">META INDUSTRIE</div>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-label">Date</span>
+        <span class="meta-value" contenteditable="true">28 Janvier 2025</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Consultant</span>
+        <span class="meta-value" contenteditable="true">Paul Obara</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Durée</span>
+        <span class="meta-value" contenteditable="true">4 semaines</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FA4616" stroke-width="2">
+      <path d="M12 5v14M19 12l-7 7-7-7"/>
+    </svg>
+  </div>
+</section>
+
+<!-- PRÉSENTATION ENTREPRISE -->
+<section id="presentation" class="section light">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">01. PRÉSENTATION</div>
+      <h2 class="section-title">À propos de l'entreprise</h2>
+      <p class="section-subtitle">Contexte et environnement de l'organisation</p>
+    </div>
+
+    <div class="entreprise-grid">
+      <div class="entreprise-card">
+        <div class="card-icon">🏭</div>
+        <h3 class="card-title" contenteditable="true">Secteur d'activité</h3>
+        <p class="card-content" contenteditable="true">
+          Industrie manufacturière spécialisée dans la production de composants métalliques pour l'aéronautique et l'automobile. 
+          L'entreprise emploie 250 collaborateurs répartis sur 2 sites de production et réalise un CA de 45M€.
+        </p>
+      </div>
+
+      <div class="entreprise-card">
+        <div class="card-icon">🎯</div>
+        <h3 class="card-title" contenteditable="true">Objectifs stratégiques</h3>
+        <p class="card-content" contenteditable="true">
+          Modernisation de l'outil industriel, amélioration de la compétitivité par la réduction des coûts de 20%, 
+          et développement d'une offre de services à valeur ajoutée grâce aux données et à l'IA.
+        </p>
+      </div>
+
+      <div class="entreprise-card">
+        <div class="card-icon">💼</div>
+        <h3 class="card-title" contenteditable="true">Environnement</h3>
+        <p class="card-content" contenteditable="true">
+          Marché en forte croissance (+8%/an) mais pression concurrentielle accrue. 
+          Nécessité d'industrialiser les processus et d'optimiser la qualité pour conserver les certifications aéronautiques.
+        </p>
+      </div>
+
+      <div class="entreprise-card">
+        <div class="card-icon">🔧</div>
+        <h3 class="card-title" contenteditable="true">Moyens techniques</h3>
+        <p class="card-content" contenteditable="true">
+          Parc machines de 45 équipements (CNC, presses, robots), ERP SAP depuis 2018, 
+          MES partiellement déployé, infrastructure IT Azure. Données partiellement digitalisées.
+        </p>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" contenteditable="true">250</div>
+        <div class="stat-label" contenteditable="true">Collaborateurs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" contenteditable="true">45M€</div>
+        <div class="stat-label" contenteditable="true">Chiffre d'affaires</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" contenteditable="true">2</div>
+        <div class="stat-label" contenteditable="true">Sites production</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" contenteditable="true">45</div>
+        <div class="stat-label" contenteditable="true">Machines</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLÉMATIQUE -->
+<section id="problematique" class="section dark">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">02. PROBLÉMATIQUE</div>
+      <h2 class="section-title">Enjeux & Défis identifiés</h2>
+      <p class="section-subtitle">Principaux points de friction et opportunités d'amélioration</p>
+    </div>
+
+    <div class="problemes-grid">
+      <div class="probleme-card">
+        <div class="probleme-number">1</div>
+        <p class="probleme-text" contenteditable="true">
+          <strong>Arrêts machines fréquents:</strong> 15% du temps de production perdu en pannes non planifiées, 
+          coûtant environ 450k€/an en perte de chiffre d'affaires
+        </p>
+      </div>
+
+      <div class="probleme-card">
+        <div class="probleme-number">2</div>
+        <p class="probleme-text" contenteditable="true">
+          <strong>Qualité insuffisante:</strong> Taux de rebut à 8% vs objectif 3%, 
+          difficultés à identifier les causes racines des non-conformités
+        </p>
+      </div>
+
+      <div class="probleme-card">
+        <div class="probleme-number">3</div>
+        <p class="probleme-text" contenteditable="true">
+          <strong>Stocks immobilisés:</strong> 2M€ de trésorerie bloquée dans les stocks de matières et produits finis, 
+          prévisions de la demande imprécises
+        </p>
+      </div>
+
+      <div class="probleme-card">
+        <div class="probleme-number">4</div>
+        <p class="probleme-text" contenteditable="true">
+          <strong>Données dispersées:</strong> Informations éclatées entre ERP, MES, Excel et papier, 
+          impossible d'avoir une vision consolidée en temps réel
+        </p>
+      </div>
+
+      <div class="probleme-card">
+        <div class="probleme-number">5</div>
+        <p class="probleme-text" contenteditable="true">
+          <strong>Prise de décision lente:</strong> Reporting manuel chronophage (2 jours/semaine), 
+          manque d'indicateurs prédictifs pour anticiper les problèmes
+        </p>
+      </div>
+
+      <div class="probleme-card">
+        <div class="probleme-number">6</div>
+        <p class="probleme-text" contenteditable="true">
+          <strong>Compétences data limitées:</strong> Absence de profils data (Analyst, Engineer), 
+          équipes IT surchargées, difficultés à exploiter le potentiel des données
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CADRE DU DIAGNOSTIC -->
+<section id="cadre" class="section light">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">03. CADRE</div>
+      <h2 class="section-title">Méthodologie du diagnostic</h2>
+      <p class="section-subtitle">Approche structurée et livrables</p>
+    </div>
+
+    <div class="entreprise-grid">
+      <div class="entreprise-card">
+        <div class="card-icon">📋</div>
+        <h3 class="card-title" contenteditable="true">Périmètre</h3>
+        <p class="card-content" contenteditable="true">
+          <strong>Services analysés:</strong> Production, Qualité, Supply Chain, Commercial, IT, RH<br>
+          <strong>Sites:</strong> 2 sites de production + siège<br>
+          <strong>Processus:</strong> De la commande à la livraison<br>
+          <strong>Systèmes:</strong> ERP SAP, MES, outils BI existants
+        </p>
+      </div>
+
+      <div class="entreprise-card">
+        <div class="card-icon">👥</div>
+        <h3 class="card-title" contenteditable="true">Parties prenantes</h3>
+        <p class="card-content" contenteditable="true">
+          <strong>15 interviews:</strong> Direction, Managers, Opérationnels<br>
+          <strong>3 ateliers:</strong> Sessions de co-construction<br>
+          <strong>Visite terrain:</strong> 2 jours sur site production<br>
+          <strong>Audit IT:</strong> Infrastructure et architecture data
+        </p>
+      </div>
+
+      <div class="entreprise-card">
+        <div class="card-icon">📊</div>
+        <h3 class="card-title" contenteditable="true">Analyse</h3>
+        <p class="card-content" contenteditable="true">
+          <strong>Cartographie:</strong> Sources de données et flux<br>
+          <strong>Maturité data:</strong> Évaluation sur 6 dimensions<br>
+          <strong>Benchmark:</strong> Comparaison sectorielle<br>
+          <strong>Opportunités:</strong> Identification de 12 cas d'usage
+        </p>
+      </div>
+
+      <div class="entreprise-card">
+        <div class="card-icon">🚀</div>
+        <h3 class="card-title" contenteditable="true">Livrables</h3>
+        <p class="card-content" contenteditable="true">
+          <strong>Rapport détaillé:</strong> 60 pages d'analyse<br>
+          <strong>Roadmap:</strong> Plan de transformation 18 mois<br>
+          <strong>Budget:</strong> Estimation détaillée par projet<br>
+          <strong>Présentation:</strong> Slides exécutif 30 min
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTIONS PAR SERVICE -->
+<section id="solutions" class="section dark">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">04. SOLUTIONS</div>
+      <h2 class="section-title">Cas d'usage par service</h2>
+      <p class="section-subtitle">Cliquez sur un service pour découvrir les cas d'usage détaillés</p>
+    </div>
+
+    <div class="services-container">
+      <!-- SERVICE PRODUCTION -->
+      <div class="service-block">
+        <div class="service-header" onclick="toggleService('production')">
+          <div class="service-icon-large">🏭</div>
+          <div class="service-info">
+            <h3 class="service-name">PRODUCTION</h3>
+            <p class="service-description">Optimisation des rendements et maintenance prédictive</p>
+          </div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="cas-usage-list" id="production-cases">
+          <div class="cas-usage-card" onclick="openModal('cas1')">
+            <span class="cas-usage-tag">IA Prédictive</span>
+            <h4 class="cas-usage-titre">Maintenance Prédictive des Machines</h4>
+            <p class="cas-usage-resume">
+              Anticiper les pannes 48-72h à l'avance grâce à l'IA pour réduire de 60% les arrêts non planifiés
+            </p>
+            <div class="cas-usage-meta">
+              <span class="badge roi">ROI: 4 mois</span>
+              <span class="badge cout">121k€</span>
+              <span class="badge delai">6 mois</span>
+            </div>
+          </div>
+
+          <div class="cas-usage-card" onclick="openModal('cas2')">
+            <span class="cas-usage-tag">Analytics</span>
+            <h4 class="cas-usage-titre">Optimisation des Paramètres Process</h4>
+            <p class="cas-usage-resume">
+              Analyser les corrélations entre paramètres machines et qualité pour améliorer les rendements de 15%
+            </p>
+            <div class="cas-usage-meta">
+              <span class="badge roi">ROI: 8 mois</span>
+              <span class="badge cout">65k€</span>
+              <span class="badge delai">4 mois</span>
+            </div>
+          </div>
+
+          <div class="cas-usage-card" onclick="openModal('cas3')">
+            <span class="cas-usage-tag">IoT</span>
+            <h4 class="cas-usage-titre">Suivi Temps Réel de la Production</h4>
+            <p class="cas-usage-resume">
+              Dashboards en temps réel du TRS, OEE et indicateurs de performance par machine et ligne
+            </p>
+            <div class="cas-usage-meta">
+              <span class="badge roi">ROI: 6 mois</span>
+              <span class="badge cout">45k€</span>
+              <span class="badge delai">3 mois</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SERVICE QUALITÉ -->
+      <div class="service-block">
+        <div class="service-header" onclick="toggleService('qualite')">
+          <div class="service-icon-large">✨</div>
+          <div class="service-info">
+            <h3 class="service-name">QUALITÉ</h3>
+            <p class="service-description">Contrôle automatisé et analyse des défauts</p>
+          </div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="cas-usage-list" id="qualite-cases">
+          <div class="cas-usage-card" onclick="openModal('cas4')">
+            <span class="cas-usage-tag">Vision IA</span>
+            <h4 class="cas-usage-titre">Contrôle Qualité par Vision Industrielle</h4>
+            <p class="cas-usage-resume">
+              Détection automatique des défauts en temps réel avec précision >98%, réduction du taux de rebut de 25%
+            </p>
+            <div class="cas-usage-meta">
+              <span class="badge roi">ROI: 8 mois</span>
+              <span class="badge cout">95k€</span>
+              <span class="badge delai">5 mois</span>
+            </div>
+          </div>
+
+          <div class="cas-usage-card" onclick="openModal('cas5')">
+            <span class="cas-usage-tag">Analytics</span>
+            <h4 class="cas-usage-titre">Analyse Racine des Non-Conformités</h4>
+            <p class="cas-usage-resume">
+              Identifier automatiquement les causes des défauts par Machine Learning pour action corrective rapide
+            </p>
+            <div class="cas-usage-meta">
+              <span class="badge roi">ROI: 10 mois</span>
+              <span class="badge cout">42k€</span>
+              <span class="badge delai">3 mois</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SERVICE SUPPLY CHAIN -->
+      <div class="service-block">
+        <div class="service-header" onclick="toggleService('supply')">
+          <div class="service-icon-large">📦</div>
+          <div class="service-info">
+            <h3 class="service-name">SUPPLY CHAIN</h3>
+            <p class="service-description">Optimisation stocks et prévisions intelligentes</p>
+          </div>
+          <div class="toggle-icon">▼</div>
+        </div>
+        <div class="cas-usage-list" id="supply-cases">
+          <div class="cas-usage-card" onclick="openModal('cas6')">
+            <span class="cas-usage-tag">ML Prédictif</span>
+            <h4 class="cas-usage-titre">Prévision de la Demande par IA</h4>
+            <p class="cas-usage-resume">
+              Algorithmes de Machine Learning pour améliorer de 40% la précision des prévisions et réduire les stocks
+            </p>
+            <div class="cas-usage-meta">
+              <span class="badge roi">ROI: 12 mois</span>
+              <span class="badge cout">78k€</span>
+              <span class="badge delai">5 mois</span>
+            </div>
+          </div>
+
+          <div class="cas-usage-card" onclick="openModal('cas7')">
+            <span class="cas-usage-tag">Optimisation</span>
+            <h4 class="cas-usage-titre">Gestion Intelligente des Stocks</h4>
+            <p class="cas-usage-resume">
+              Optimisation des niveaux de stock par référence pour libérer 20% de trésorerie immobilisée
+            </p>
+            <div class="cas-usage-meta">
+              <span class="badge roi">ROI: 6 mois</span>
+              <span class="badge cout">35k€</span>
+              <span class="badge delai">3 mois</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL DÉTAILS CAS D'USAGE -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-content" id="modal-content">
+    <!-- Le contenu sera injecté dynamiquement -->
+  </div>
+</div>
+
+<script>
+// ========================================
+// CLICK SPARK EFFECT
+// ========================================
+(function() {
+  const canvas = document.getElementById('spark-canvas');
+  const ctx = canvas.getContext('2d');
+  let sparks = [];
+  
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  
+  document.addEventListener('click', function(e) {
+    const now = performance.now();
+    for (let i = 0; i < 8; i++) {
+      sparks.push({
+        x: e.clientX,
+        y: e.clientY,
+        angle: (2 * Math.PI * i) / 8,
+        startTime: now
+      });
+    }
+  });
+  
+  function animate(timestamp) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    sparks = sparks.filter(spark => {
+      const elapsed = timestamp - spark.startTime;
+      if (elapsed >= 400) return false;
+      
+      const progress = elapsed / 400;
+      const eased = progress * (2 - progress);
+      const distance = eased * 15;
+      const lineLength = 10 * (1 - eased);
+      
+      const x1 = spark.x + distance * Math.cos(spark.angle);
+      const y1 = spark.y + distance * Math.sin(spark.angle);
+      const x2 = spark.x + (distance + lineLength) * Math.cos(spark.angle);
+      const y2 = spark.y + (distance + lineLength) * Math.sin(spark.angle);
+      
+      ctx.strokeStyle = '#FA4616';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      
+      return true;
+    });
+    
+    requestAnimationFrame(animate);
+  }
+  
+  requestAnimationFrame(animate);
+})();
+
+// ========================================
+// SCROLL EFFECTS
+// ========================================
+window.addEventListener('scroll', function() {
+  const navbar = document.querySelector('.navbar');
+  if (window.scrollY > 100) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
+
+// ========================================
+// TOGGLE SERVICE
+// ========================================
+function toggleService(serviceId) {
+  const list = document.getElementById(serviceId + '-cases');
+  const header = event.currentTarget;
+  
+  if (list.classList.contains('active')) {
+    list.classList.remove('active');
+    header.classList.remove('active');
+  } else {
+    // Fermer les autres
+    document.querySelectorAll('.cas-usage-list').forEach(l => l.classList.remove('active'));
+    document.querySelectorAll('.service-header').forEach(h => h.classList.remove('active'));
+    
+    list.classList.add('active');
+    header.classList.add('active');
+  }
+}
+
+// ========================================
+// MODAL CAS D'USAGE
+// ========================================
+const casUsageData = {
+  cas1: {
+    titre: "Maintenance Prédictive des Machines",
+    tag: "IA Prédictive",
+    contexte: "Les arrêts machines non planifiés représentent 15% du temps disponible et génèrent des pertes de production estimées à 450k€/an. L'objectif est de mettre en place un système de maintenance prédictive basé sur l'IA pour anticiper les défaillances 48 à 72h avant leur survenue, permettant une intervention planifiée et une réduction de 60% des arrêts non programmés.",
+    solutions: [
+      {
+        titre: "1.1 Capteurs IoT et collecte de données temps réel",
+        description: "Installation de capteurs sur les machines critiques pour collecter les signaux vibratoires, thermiques, acoustiques et de consommation électrique.",
+        items: [
+          "Capteurs vibratoires triaxiaux pour détecter anomalies mécaniques",
+          "Capteurs température infrarouge pour surveiller échauffement",
+          "Capteurs courant électrique pour analyser variations de consommation",
+          "Gateway IoT industrielle avec protocole MQTT sécurisé"
+        ]
+      },
+      {
+        titre: "1.2 Modèles IA prédictive et Machine Learning",
+        description: "Développement de modèles ML entraînés sur l'historique des pannes pour détecter les anomalies précurseurs de défaillance.",
+        items: [
+          "Algorithmes détection d'anomalies (Isolation Forest, Autoencoders)",
+          "Modèles prédiction durée de vie résiduelle (RUL)",
+          "Classification types de pannes par Random Forest / XGBoost",
+          "Réentraînement continu avec nouvelles données (MLOps)"
+        ]
+      },
+      {
+        titre: "1.3 Dashboard de pilotage et alertes intelligentes",
+        description: "Interface de visualisation en temps réel avec scores de santé machine, prédictions et recommandations d'intervention.",
+        items: [
+          "Tableau de bord Power BI ou Grafana avec KPI santé machines",
+          "Système d'alertes graduées : info, warning, critique",
+          "Vue calendaire des interventions recommandées",
+          "Application mobile pour accès terrain maintenance"
+        ]
+      }
+    ],
+    cout: {
+      details: [
+        "Licences: 15k€/an (Azure IoT Hub + ML + Power BI)",
+        "Hardware IoT: 25k€ (capteurs + gateway pour 10 machines)",
+        "Développement: 40k€ (modèles ML + intégration + dashboards)",
+        "Formation: 5k€ (équipe maintenance)",
+        "Accompagnement: 30 jours × 1200€ = 36k€",
+        "",
+        "Total première année: 121k€",
+        "Coûts récurrents: 20k€/an"
+      ]
+    },
+    gain: {
+      details: [
+        "Réduction arrêts non planifiés: -60% → 270k€/an",
+        "Optimisation coûts maintenance: -25% → 80k€/an",
+        "Réduction stocks pièces détachées: -20% → 35k€/an",
+        "Amélioration disponibilité machines: +10% TRS",
+        "",
+        "Total gains annuels: 385k€",
+        "ROI: 4 mois",
+        "Gains cumulés 3 ans: 1,15M€"
+      ]
+    },
+    etapes: [
+      {
+        titre: "Étape 1: Audit technique et sélection machines pilotes (M+1)",
+        description: "Identification des 3 machines critiques pour le POC, analyse des données disponibles et définition des KPI de succès.",
+        items: [
+          "Cartographie machines et criticité (AMDEC)",
+          "Collecte historique pannes et interventions maintenance",
+          "Vérification compatibilité technique (automates, connectivité)",
+          "Définition objectifs: réduction 60% arrêts, prédiction 48h à l'avance"
+        ]
+      },
+      {
+        titre: "Étape 2: Installation capteurs et infrastructure data (M+2 à M+3)",
+        description: "Déploiement des capteurs IoT, mise en place de la plateforme cloud et des pipelines de données.",
+        items: [
+          "Installation capteurs sur machines pilotes (vibrations, température, courant)",
+          "Configuration Azure IoT Hub et stockage Data Lake",
+          "Mise en place pipelines ETL pour traitement données temps réel",
+          "Tests de connectivité et validation qualité des données collectées"
+        ]
+      },
+      {
+        titre: "Étape 3: Développement et entraînement modèles IA (M+3 à M+4)",
+        description: "Construction des modèles de Machine Learning avec historique de données, tests et validation de la performance prédictive.",
+        items: [
+          "Labellisation données historiques (pannes vs fonctionnement normal)",
+          "Développement modèles ML (Isolation Forest, LSTM, Random Forest)",
+          "Entraînement et optimisation hyperparamètres",
+          "Validation performance: précision >85%, rappel >90%"
+        ]
+      }
+    ]
+  }
+  // Ajouter les autres cas d'usage ici...
+};
+
+function openModal(casId) {
+  const modal = document.getElementById('modal');
+  const content = document.getElementById('modal-content');
+  const data = casUsageData[casId];
+  
+  if (!data) return;
+  
+  let solutionsHTML = '';
+  data.solutions.forEach(sol => {
+    solutionsHTML += `
+      <div class="solution-block">
+        <h4 class="solution-title">${sol.titre}</h4>
+        <p class="solution-description">${sol.description}</p>
+        <ul class="solution-list">
+          ${sol.items.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+  });
+  
+  let etapesHTML = '';
+  data.etapes.forEach(etape => {
+    etapesHTML += `
+      <div class="etape-card">
+        <h4 class="solution-title">${etape.titre}</h4>
+        <p class="solution-description">${etape.description}</p>
+        <ul class="solution-list">
+          ${etape.items.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+  });
+  
+  content.innerHTML = `
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <span class="cas-usage-tag">${data.tag}</span>
+      <h2 class="modal-title">${data.titre}</h2>
+      <p class="modal-contexte">${data.contexte}</p>
+    </div>
+    
+    <div class="modal-body">
+      <div class="solutions-section">
+        <h3 style="font-size: 32px; font-weight: 800; margin-bottom: 30px;">Solutions Techniques</h3>
+        ${solutionsHTML}
+      </div>
+      
+      <div class="couts-gains">
+        <div class="cout-box">
+          <div class="box-icon">💰</div>
+          <h3 class="box-title">Coûts estimés</h3>
+          <div class="box-content">
+            ${data.cout.details.join('<br>')}
+          </div>
+        </div>
+        <div class="gain-box">
+          <div class="box-icon">📈</div>
+          <h3 class="box-title">Gains estimés</h3>
+          <div class="box-content">
+            ${data.gain.details.join('<br>')}
+          </div>
+        </div>
+      </div>
+      
+      <div class="mise-en-oeuvre">
+        <h3 class="mise-en-oeuvre-title">Mise en Œuvre - Planning sur 6 mois</h3>
+        <div class="etapes-list">
+          ${etapesHTML}
+        </div>
+      </div>
+    </div>
+  `;
+  
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  modal.classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+// Fermer modal en cliquant sur l'overlay
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeModal();
+  }
+});
+
+// ========================================
+// UTILITAIRES
+// ========================================
+function toggleEditMode() {
+  alert('✏️ Mode édition: Cliquez sur les textes pour les modifier');
+}
+
+function saveContent() {
+  const content = document.documentElement.outerHTML;
+  const blob = new Blob([content], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'diagnostic-pulsa-' + new Date().toISOString().split('T')[0] + '.html';
+  a.click();
+  URL.revokeObjectURL(url);
+  alert('✅ Diagnostic sauvegardé!');
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+console.log('✨ Diagnostic Pulsa Interactif chargé avec succès!');
+</script>
+
+</body>
+</html>

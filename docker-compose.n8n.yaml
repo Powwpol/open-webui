@@ -1,0 +1,98 @@
+version: '3.8'
+
+# Configuration Docker Compose pour n8n
+# Supporte à la fois n8n classique et n8n-mcp
+
+networks:
+  pulsai-network:
+    external: true
+    name: pulsai_pulsai-network
+
+volumes:
+  n8n-data:
+    driver: local
+  n8n-mcp-data:
+    driver: local
+
+services:
+  # ============================================
+  # n8n Classique (Workflow Automation)
+  # ============================================
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:next
+    container_name: pulsai-n8n
+    restart: unless-stopped
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    networks:
+      - pulsai-network
+    volumes:
+      - n8n-data:/home/node/.n8n
+    environment:
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-http}
+      - WEBHOOK_URL=${N8N_WEBHOOK_URL:-http://localhost:5678/}
+      - GENERIC_TIMEZONE=${TIMEZONE:-Europe/Paris}
+      - N8N_LOG_LEVEL=${N8N_LOG_LEVEL:-info}
+      - N8N_DIAGNOSTICS_ENABLED=${N8N_DIAGNOSTICS_ENABLED:-false}
+      - N8N_PERSONALIZATION_ENABLED=${N8N_PERSONALIZATION_ENABLED:-false}
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:5678/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+  # ============================================
+  # n8n-MCP (n8n avec support MCP)
+  # ============================================
+  n8n-mcp:
+    image: ghcr.io/czlonkowski/n8n-mcp:latest
+    container_name: pulsai-n8n-mcp
+    restart: unless-stopped
+    ports:
+      - "${N8N_MCP_PORT:-3000}:3000"
+    networks:
+      - pulsai-network
+    volumes:
+      - n8n-mcp-data:/app/data
+    environment:
+      - MCP_PORT=3000
+      - N8N_MCP_ENABLED=true
+      - PULSAI_API_URL=${PULSAI_API_URL:-http://pulsai-backend:8080}
+      - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN:-}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+

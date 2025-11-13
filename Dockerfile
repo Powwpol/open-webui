@@ -175,7 +175,8 @@ COPY --chown=$UID:$GID ./backend .
 
 # Ensure CHANGELOG.md exists to satisfy runtime check
 RUN [ -f /app/CHANGELOG.md ] || echo "Pulsai Docker build" > /app/CHANGELOG.md && \
-    [ -f /app/backend/open_webui/CHANGELOG.md ] || echo "" > /app/backend/open_webui/CHANGELOG.md
+    mkdir -p /app/backend/pulsai && \
+    [ -f /app/backend/pulsai/CHANGELOG.md ] || echo "" > /app/backend/pulsai/CHANGELOG.md
 
 EXPOSE 8080
 

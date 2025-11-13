@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic Data & IA - Format Bpifrance | Pulsa Conseil</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reactflow@11/dist/umd/index.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reactflow@11/dist/style.css">
+<style>
+/* ========================================
+   PALETTE PULSA CONSEIL (Couleurs Officielles)
+   ======================================== */
+:root {
+  /* Couleurs principales Pulsa */
+  --pulsa-noir: #000000;
+  --pulsa-blanc: #FFFFFF;
+  --pulsa-gris-fonce: #EAEAEA;
+  --pulsa-gris-clair: #F5F5F5;
+  --pulsa-orange-fonce: #FA4616;
+  --pulsa-orange-clair: #FAC090;
+  --pulsa-vert: #00B050;
+  --pulsa-rouge: #FF0000;
+  --pulsa-vert-fonce: #43635A;
+  --pulsa-bleu-fonce: #2751E3;
+  
+  /* Dégradés */
+  --pulsa-gradient: linear-gradient(135deg, #FA4616 0%, #FAC090 100%);
+  --pulsa-gradient-dark: linear-gradient(135deg, #000000 0%, #43635A 100%);
+  --pulsa-gradient-vert: linear-gradient(135deg, #00B050 0%, #43635A 100%);
+  --pulsa-gradient-bleu: linear-gradient(135deg, #2751E3 0%, #00B050 100%);
+  
+  /* Ombres */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --shadow-accent: 0 8px 24px rgba(250, 70, 22, 0.25);
+  --shadow-vert: 0 8px 24px rgba(0, 176, 80, 0.25);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--pulsa-blanc);
+  color: var(--pulsa-noir);
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========================================
+   NAVIGATION & HEADER
+   ======================================== */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--pulsa-blanc);
+  padding: 20px 40px;
+  box-shadow: var(--shadow-sm);
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--pulsa-noir);
+  letter-spacing: -0.5px;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-btn {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-btn.primary {
+  background: var(--pulsa-gradient);
+  color: var(--pulsa-blanc);
+  box-shadow: var(--shadow-accent);
+}
+
+.nav-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 212, 170, 0.35);
+}
+
+.nav-btn.secondary {
+  background: transparent;
+  color: var(--pulsa-noir);
+  border: 2px solid var(--pulsa-gris-clair);
+}
+
+.nav-btn.secondary:hover {
+  border-color: var(--pulsa-accent);
+  color: var(--pulsa-accent);
+}
+
+/* ========================================
+   COVER PAGE
+   ======================================== */
+.cover-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--pulsa-gradient-dark);
+  padding: 120px 40px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(0, 212, 170, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(74, 144, 226, 0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.cover-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 1000px;
+}
+
+.cover-logo {
+  font-size: 56px;
+  font-weight: 900;
+  background: var(--pulsa-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 40px;
+  letter-spacing: -1px;
+}
+
+.cover-title {
+  font-size: 72px;
+  font-weight: 900;
+  color: var(--pulsa-blanc);
+  margin-bottom: 30px;
+  line-height: 1.1;
+  letter-spacing: -2px;
+}
+
+.cover-subtitle {
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--pulsa-blanc);
+  opacity: 0.9;
+  margin-bottom: 40px;
+}
+
+.cover-client {
+  font-size: 56px;
+  font-weight: 800;
+  background: var(--pulsa-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 60px;
+  padding: 20px 40px;
+  border: 3px solid rgba(0, 212, 170, 0.3);
+  border-radius: 16px;
+  display: inline-block;
+}
+
+.cover-meta {
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+  color: var(--pulsa-blanc);
+  margin-top: 50px;
+}
+
+.cover-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cover-meta-label {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.cover-meta-value {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* ========================================
+   SECTIONS
+   ======================================== */
+.page {
+  min-height: 100vh;
+  padding: 120px 60px 80px;
+  page-break-after: always;
+}
+
+.page.light {
+  background: var(--pulsa-blanc);
+}
+
+.page.dark {
+  background: var(--pulsa-gris-clair);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  margin-bottom: 60px;
+}
+
+.section-number {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pulsa-accent);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.section-title {
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--pulsa-noir);
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.section-subtitle {
+  font-size: 20px;
+  color: var(--pulsa-gris-moyen);
+  font-weight: 400;
+}
+
+/* ========================================
+   SLIDE BPIFRANCE - ENJEUX MACRO
+   ======================================== */
+.slide-enjeux {
+  background: var(--pulsa-blanc);
+  border-radius: 20px;
+  padding: 50px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 40px;
+}
+
+.enjeux-statement {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--pulsa-noir);
+  margin-bottom: 40px;
+  line-height: 1.5;
+}
+
+.enjeux-statement .editable-company {
+  color: var(--pulsa-accent);
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-color: var(--pulsa-accent);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+
+.enjeux-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+.enjeu-card {
+  background: var(--pulsa-gris-clair);
+  padding: 30px;
+  border-radius: 16px;
+  border-left: 4px solid var(--pulsa-accent);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.enjeu-card:hover {
+  transform: translateX(8px);
+  box-shadow: var(--shadow-md);
+  border-left-color: var(--pulsa-bleu);
+}
+
+.enjeu-number {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pulsa-accent);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.enjeu-content {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--pulsa-noir);
+  line-height: 1.6;
+}
+
+/* ========================================
+   SLIDE BPIFRANCE - PÉRIMÈTRE
+   ======================================== */
+.slide-perimetre {
+  background: var(--pulsa-blanc);
+  border-radius: 20px;
+  padding: 50px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 40px;
+}
+
+.perimetre-description {
+  font-size: 18px;
+  color: var(--pulsa-gris-moyen);
+  margin-bottom: 40px;
+  padding: 30px;
+  background: var(--pulsa-gris-clair);
+  border-radius: 12px;
+  border-left: 4px solid var(--pulsa-accent);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.service-card {
+  background: var(--pulsa-gradient);
+  color: var(--pulsa-blanc);
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-accent);
+  transition: all 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 212, 170, 0.35);
+}
+
+.service-icon {
+  font-size: 42px;
+  margin-bottom: 20px;
+}
+
+.service-name {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.service-enjeux {
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+/* ========================================
+   SLIDE BPIFRANCE - PROBLÈMES REMONTÉS
+   ======================================== */
+.slide-problemes {
+  margin-bottom: 40px;
+}
+
+.service-section {
+  background: var(--pulsa-blanc);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 30px;
+}
+
+.service-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--pulsa-noir);
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 3px solid var(--pulsa-accent);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.service-icon-large {
+  font-size: 36px;
+}
+
+.problematiques-list {
+  display: grid;
+  gap: 20px;
+}
+
+.problematique-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 25px;
+  background: var(--pulsa-gris-clair);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.problematique-item:hover {
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  transform: translateX(5px);
+}
+
+.problematique-number {
+  min-width: 40px;
+  height: 40px;
+  background: var(--pulsa-gradient);
+  color: var(--pulsa-blanc);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.problematique-text {
+  flex: 1;
+  font-size: 17px;
+  color: var(--pulsa-noir);
+  line-height: 1.6;
+}
+
+/* ========================================
+   SLIDE BPIFRANCE - CAS D'USAGE
+   ======================================== */
+.slide-cas-usage {
+  background: var(--pulsa-blanc);
+  border-radius: 20px;
+  padding: 50px;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 60px;
+  border: 2px solid var(--pulsa-gris-clair);
+}
+
+.cas-usage-header {
+  background: var(--pulsa-gradient);
+  color: var(--pulsa-blanc);
+  padding: 40px;
+  border-radius: 16px;
+  margin-bottom: 40px;
+}
+
+.cas-usage-numero {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.cas-usage-nom {
+  font-size: 36px;
+  font-weight: 900;
+  margin-bottom: 25px;
+  line-height: 1.2;
+}
+
+.cas-usage-contexte {
+  font-size: 18px;
+  line-height: 1.8;
+  opacity: 0.95;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.fonctionnalites-section {
+  margin-bottom: 40px;
+}
+
+.fonctionnalite-block {
+  background: var(--pulsa-gris-clair);
+  padding: 35px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+  border-left: 4px solid var(--pulsa-accent);
+}
+
+.fonctionnalite-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--pulsa-noir);
+  margin-bottom: 15px;
+}
+
+.fonctionnalite-description {
+  font-size: 17px;
+  color: var(--pulsa-gris-moyen);
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
+
+.fonctionnalite-list {
+  list-style: none;
+  margin-left: 0;
+}
+
+.fonctionnalite-list li {
+  padding: 10px 0 10px 30px;
+  position: relative;
+  font-size: 16px;
+  color: var(--pulsa-noir);
+  line-height: 1.6;
+}
+
+.fonctionnalite-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--pulsa-accent);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.couts-gains-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin: 40px 0;
+}
+
+.cout-card, .gain-card {
+  padding: 35px;
+  border-radius: 16px;
+}
+
+.cout-card {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c61 100%);
+  color: var(--pulsa-blanc);
+}
+
+.gain-card {
+  background: var(--pulsa-gradient);
+  color: var(--pulsa-blanc);
+}
+
+.card-title-icon {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.card-title-text {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.card-content {
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.mise-en-oeuvre-section {
+  margin-top: 50px;
+}
+
+.mise-en-oeuvre-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--pulsa-noir);
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid var(--pulsa-accent);
+}
+
+.etape-block {
+  background: var(--pulsa-blanc);
+  padding: 35px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--pulsa-gris-clair);
+  transition: all 0.3s ease;
+}
+
+.etape-block:hover {
+  border-color: var(--pulsa-accent);
+  box-shadow: var(--shadow-md);
+}
+
+/* ========================================
+   DIAGRAMME REACT FLOW
+   ======================================== */
+.diagram-container {
+  background: var(--pulsa-blanc);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: var(--shadow-md);
+  margin: 40px 0;
+}
+
+.diagram-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.diagram-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--pulsa-noir);
+  margin-bottom: 10px;
+}
+
+.diagram-subtitle {
+  font-size: 16px;
+  color: var(--pulsa-gris-moyen);
+}
+
+#react-flow-wrapper {
+  height: 600px;
+  border-radius: 16px;
+  border: 2px solid var(--pulsa-gris-clair);
+  overflow: hidden;
+}
+
+/* ========================================
+   BOUTONS D'ACTION FLOTTANTS
+   ======================================== */
+.floating-actions {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 999;
+}
+
+.action-btn-float {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--pulsa-gradient);
+  color: var(--pulsa-blanc);
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: var(--shadow-accent);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn-float:hover {
+  transform: scale(1.15);
+  box-shadow: 0 12px 40px rgba(0, 212, 170, 0.4);
+}
+
+/* ========================================
+   UTILITAIRES
+   ======================================== */
+.editable {
+  outline: 2px dashed transparent;
+  transition: all 0.3s ease;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: text;
+}
+
+.editable:hover {
+  outline-color: var(--pulsa-accent);
+  background: rgba(0, 212, 170, 0.05);
+}
+
+.editable:focus {
+  outline-color: var(--pulsa-accent);
+  background: rgba(0, 212, 170, 0.1);
+}
+
+.copy-btn {
+  background: var(--pulsa-gradient);
+  color: var(--pulsa-blanc);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-accent);
+}
+
+.copy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 212, 170, 0.35);
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 4px;
+}
+
+.badge.tech {
+  background: var(--pulsa-gradient);
+  color: var(--pulsa-blanc);
+}
+
+.badge.cout {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c61 100%);
+  color: var(--pulsa-blanc);
+}
+
+.badge.roi {
+  background: linear-gradient(135deg, #4a90e2 0%, #67b3ff 100%);
+  color: var(--pulsa-blanc);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  .cover-title { font-size: 42px; }
+  .cover-subtitle { font-size: 20px; }
+  .cover-client { font-size: 32px; }
+  .section-title { font-size: 32px; }
+  .page { padding: 100px 30px 60px; }
+  .couts-gains-section { grid-template-columns: 1fr; }
+  .enjeux-grid { grid-template-columns: 1fr; }
+  .services-grid { grid-template-columns: 1fr; }
+}
+
+@media print {
+  .floating-actions, .top-nav { display: none; }
+  .page { page-break-after: always; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<div class="top-nav">
+  <div class="logo">PULSA</div>
+  <div class="nav-actions">
+    <button class="nav-btn secondary" onclick="toggleEditMode()">✏️ Éditer</button>
+    <button class="nav-btn primary" onclick="window.print()">🖨️ Exporter PDF</button>
+  </div>
+</div>
+
+<!-- Boutons d'action flottants -->
+<div class="floating-actions">
+  <button class="action-btn-float" onclick="saveContent()" title="Sauvegarder">💾</button>
+  <button class="action-btn-float" onclick="scrollToTop()" title="Haut de page">⬆️</button>
+</div>
+
+<!-- PAGE DE COUVERTURE -->
+<div class="cover-page">
+  <div class="cover-content">
+    <div class="cover-logo" contenteditable="true">PULSA</div>
+    <h1 class="cover-title" contenteditable="true">Diagnostic Data & IA</h1>
+    <p class="cover-subtitle" contenteditable="true">Rapport d'analyse et recommandations<br>Format Bpifrance</p>
+    <div class="cover-client" contenteditable="true">NOM ENTREPRISE</div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <span class="cover-meta-label">Date</span>
+        <span class="cover-meta-value" contenteditable="true">28 Janvier 2025</span>
+      </div>
+      <div class="cover-meta-item">
+        <span class="cover-meta-label">Consultant</span>
+        <span class="cover-meta-value" contenteditable="true">Paul Obara</span>
+      </div>
+      <div class="cover-meta-item">
+        <span class="cover-meta-label">Version</span>
+        <span class="cover-meta-value" contenteditable="true">1.0</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 1: ENJEUX MACRO -->
+<div class="page light">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SLIDE 01</div>
+      <h2 class="section-title">Enjeux Macro</h2>
+      <p class="section-subtitle">Objectifs stratégiques de la transformation</p>
+    </div>
+
+    <div class="slide-enjeux">
+      <div class="enjeux-statement">
+        Ce diagnostic doit permettre <span class="editable" contenteditable="true">d'améliorer la flexibilité et la rentabilité</span> 
+        de <span class="editable-company" contenteditable="true">NOM ENTREPRISE</span>
+      </div>
+
+      <button class="copy-btn" onclick="copySlideContent('slide-enjeux-macro')">📋 Copier pour PowerPoint</button>
+
+      <div id="slide-enjeux-macro" style="margin-top: 30px;">
+        <div class="enjeux-grid">
+          <div class="enjeu-card">
+            <div class="enjeu-number">Enjeu 1</div>
+            <div class="enjeu-content editable" contenteditable="true">
+              Optimiser la productivité opérationnelle et réduire les coûts de production de 20%
+            </div>
+          </div>
+
+          <div class="enjeu-card">
+            <div class="enjeu-number">Enjeu 2</div>
+            <div class="enjeu-content editable" contenteditable="true">
+              Améliorer la qualité des produits et réduire le taux de rebut de 30%
+            </div>
+          </div>
+
+          <div class="enjeu-card">
+            <div class="enjeu-number">Enjeu 3</div>
+            <div class="enjeu-content editable" contenteditable="true">
+              Accélérer la prise de décision grâce à des données fiables et accessibles
+            </div>
+          </div>
+
+          <div class="enjeu-card">
+            <div class="enjeu-number">Enjeu 4</div>
+            <div class="enjeu-content editable" contenteditable="true">
+              Développer une culture data-driven au sein de l'organisation
+            </div>
+          </div>
+
+          <div class="enjeu-card">
+            <div class="enjeu-number">Enjeu 5</div>
+            <div class="enjeu-content editable" contenteditable="true">
+              Anticiper les pannes machines et optimiser la maintenance (prédictif)
+            </div>
+          </div>
+
+          <div class="enjeu-card">
+            <div class="enjeu-number">Enjeu 6</div>
+            <div class="enjeu-content editable" contenteditable="true">
+              Automatiser les tâches répétitives pour libérer du temps à valeur ajoutée
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: PÉRIMÈTRE -->
+<div class="page dark">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SLIDE 02</div>
+      <h2 class="section-title">Périmètre du Diagnostic</h2>
+      <p class="section-subtitle">Services et départements analysés</p>
+    </div>
+
+    <div class="slide-perimetre">
+      <div class="perimetre-description editable" contenteditable="true">
+        Le diagnostic couvre l'ensemble des processus métier de l'entreprise, avec un focus particulier sur les services Production, Qualité, Supply Chain, Commercial et IT. L'objectif est d'identifier les opportunités de transformation data et IA sur l'ensemble de la chaîne de valeur.
+      </div>
+
+      <button class="copy-btn" onclick="copySlideContent('slide-perimetre-services')">📋 Copier pour PowerPoint</button>
+
+      <div id="slide-perimetre-services" style="margin-top: 30px;">
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon">🏭</div>
+            <div class="service-name editable" contenteditable="true">Production</div>
+            <div class="service-enjeux editable" contenteditable="true">
+              Optimisation des rendements, maintenance prédictive, traçabilité temps réel
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">✨</div>
+            <div class="service-name editable" contenteditable="true">Qualité</div>
+            <div class="service-enjeux editable" contenteditable="true">
+              Contrôle qualité automatisé, analyse des non-conformités, amélioration continue
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">📦</div>
+            <div class="service-name editable" contenteditable="true">Supply Chain</div>
+            <div class="service-enjeux editable" contenteditable="true">
+              Optimisation des stocks, prévision de la demande, gestion des approvisionnements
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">💼</div>
+            <div class="service-name editable" contenteditable="true">Commercial</div>
+            <div class="service-enjeux editable" contenteditable="true">
+              Analyse des ventes, scoring clients, prévisions commerciales, CRM intelligent
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">💻</div>
+            <div class="service-name editable" contenteditable="true">IT / Systèmes</div>
+            <div class="service-enjeux editable" contenteditable="true">
+              Infrastructure data, intégration systèmes, sécurité, gouvernance des données
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">👥</div>
+            <div class="service-name editable" contenteditable="true">RH</div>
+            <div class="service-enjeux editable" contenteditable="true">
+              Gestion des compétences, formation, analytics RH, optimisation planning
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: PROBLÈMES REMONTÉS -->
+<div class="page light">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SLIDE 03</div>
+      <h2 class="section-title">Problèmes Remontés</h2>
+      <p class="section-subtitle">Synthèse des problématiques identifiées par service</p>
+    </div>
+
+    <button class="copy-btn" onclick="copySlideContent('slide-problemes-all')" style="margin-bottom: 30px;">📋 Copier pour PowerPoint</button>
+
+    <div class="slide-problemes" id="slide-problemes-all">
+      <!-- Service Production -->
+      <div class="service-section">
+        <h3 class="service-title">
+          <span class="service-icon-large">🏭</span>
+          <span class="editable" contenteditable="true">PRODUCTION</span>
+        </h3>
+        
+        <div class="problematiques-list">
+          <div class="problematique-item">
+            <div class="problematique-number">1</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Arrêts machines non planifiés fréquents entraînant des pertes de production importantes (15% du temps disponible)
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">2</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Manque de visibilité temps réel sur les indicateurs de performance (TRS, rendement, cadence)
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">3</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Réglages machines non optimaux, générant des variations de qualité et du gaspillage matière
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">4</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Traçabilité limitée des lots de production, difficultés en cas de rappel produit
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">5</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Planning de production figé, manque d'agilité face aux changements de commandes urgentes
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">6</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Collecte de données manuelle et chronophage, risque d'erreurs de saisie
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service Qualité -->
+      <div class="service-section">
+        <h3 class="service-title">
+          <span class="service-icon-large">✨</span>
+          <span class="editable" contenteditable="true">QUALITÉ</span>
+        </h3>
+        
+        <div class="problematiques-list">
+          <div class="problematique-item">
+            <div class="problematique-number">1</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Contrôle qualité basé sur échantillonnage, ne détectant pas 100% des défauts
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">2</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Analyse des causes racines des non-conformités lente et peu systématique
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">3</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Taux de rebut élevé (8%) avec difficultés à identifier les tendances et corrélations
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">4</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Données qualité dispersées dans plusieurs systèmes (Excel, ERP, papier)
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">5</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Inspections visuelles subjectives, dépendantes de l'expérience des contrôleurs
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">6</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Retards dans la détection des dérives process, corrections tardives et coûteuses
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service Supply Chain -->
+      <div class="service-section">
+        <h3 class="service-title">
+          <span class="service-icon-large">📦</span>
+          <span class="editable" contenteditable="true">SUPPLY CHAIN</span>
+        </h3>
+        
+        <div class="problematiques-list">
+          <div class="problematique-item">
+            <div class="problematique-number">1</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Niveaux de stock trop élevés immobilisant 2M€ de trésorerie
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">2</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Ruptures de stock fréquentes sur certaines références critiques (12% des SKU)
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">3</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Prévisions de la demande imprécises, basées sur moyennes historiques simples
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">4</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Délais d'approvisionnement fournisseurs longs et variables, difficiles à anticiper
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">5</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Manque de visibilité sur les stocks en transit et chez les sous-traitants
+            </div>
+          </div>
+
+          <div class="problematique-item">
+            <div class="problematique-number">6</div>
+            <div class="problematique-text editable" contenteditable="true">
+              Optimisation des tournées de livraison inefficace, coûts de transport élevés
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: CAS D'USAGE #1 -->
+<div class="page dark">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SLIDE 04</div>
+      <h2 class="section-title">Cas d'Usage IA</h2>
+      <p class="section-subtitle">Solutions proposées avec analyse détaillée</p>
+    </div>
+
+    <div class="slide-cas-usage">
+      <button class="copy-btn" onclick="copySlideContent('cas-usage-1-content')" style="margin-bottom: 30px;">📋 Copier pour PowerPoint</button>
+
+      <div id="cas-usage-1-content">
+        <div class="cas-usage-header">
+          <div class="cas-usage-numero">CAS D'USAGE #1</div>
+          <h3 class="cas-usage-nom editable" contenteditable="true">
+            Déployer un système de maintenance prédictive pour anticiper les pannes machines
+          </h3>
+          <div class="cas-usage-contexte editable" contenteditable="true">
+            Les arrêts machines non planifiés représentent 15% du temps disponible et génèrent des pertes de production estimées à 450k€/an. L'objectif est de mettre en place un système de maintenance prédictive basé sur l'IA pour anticiper les défaillances 48 à 72h avant leur survenue, permettant une intervention planifiée et une réduction de 60% des arrêts non programmés.
+          </div>
+        </div>
+
+        <div class="fonctionnalites-section">
+          <h4 style="font-size: 24px; font-weight: 700; margin-bottom: 25px; color: var(--pulsa-noir);">Solutions Techniques Proposées</h4>
+
+          <div class="fonctionnalite-block">
+            <div class="fonctionnalite-title editable" contenteditable="true">
+              1.1 Capteurs IoT et collecte de données en temps réel
+            </div>
+            <div class="fonctionnalite-description editable" contenteditable="true">
+              Installation de capteurs sur les machines critiques pour collecter les signaux vibratoires, thermiques, acoustiques et de consommation électrique. Les données sont envoyées en temps réel vers une plateforme cloud.
+            </div>
+            <ul class="fonctionnalite-list">
+              <li class="editable" contenteditable="true">Capteurs vibratoires triaxiaux pour détecter les anomalies mécaniques</li>
+              <li class="editable" contenteditable="true">Capteurs de température infrarouge pour surveiller l'échauffement des composants</li>
+              <li class="editable" contenteditable="true">Capteurs de courant électrique pour analyser les variations de consommation</li>
+              <li class="editable" contenteditable="true">Gateway IoT industrielle avec protocole MQTT pour transmission sécurisée</li>
+            </ul>
+            <div style="margin-top: 15px;">
+              <span class="badge tech">IoT</span>
+              <span class="badge tech">MQTT</span>
+              <span class="badge tech">Edge Computing</span>
+            </div>
+          </div>
+
+          <div class="fonctionnalite-block">
+            <div class="fonctionnalite-title editable" contenteditable="true">
+              1.2 Modèles d'IA prédictive et algorithmes d'apprentissage automatique
+            </div>
+            <div class="fonctionnalite-description editable" contenteditable="true">
+              Développement de modèles de Machine Learning entraînés sur l'historique des pannes et les données de fonctionnement normal pour détecter les anomalies précurseurs de défaillance.
+            </div>
+            <ul class="fonctionnalite-list">
+              <li class="editable" contenteditable="true">Algorithmes de détection d'anomalies (Isolation Forest, Autoencoders)</li>
+              <li class="editable" contenteditable="true">Modèles de prédiction de durée de vie résiduelle (RUL - Remaining Useful Life)</li>
+              <li class="editable" contenteditable="true">Classification des types de pannes par Random Forest ou XGBoost</li>
+              <li class="editable" contenteditable="true">Réentraînement continu avec les nouvelles données (MLOps)</li>
+            </ul>
+            <div style="margin-top: 15px;">
+              <span class="badge tech">ML</span>
+              <span class="badge tech">Python</span>
+              <span class="badge tech">Azure ML</span>
+              <span class="badge tech">TensorFlow</span>
+            </div>
+          </div>
+
+          <div class="fonctionnalite-block">
+            <div class="fonctionnalite-title editable" contenteditable="true">
+              1.3 Dashboard de pilotage et alertes intelligentes
+            </div>
+            <div class="fonctionnalite-description editable" contenteditable="true">
+              Interface de visualisation en temps réel avec scores de santé machine, prédictions de pannes et recommandations d'intervention. Système d'alertes multi-canal (email, SMS, Teams).
+            </div>
+            <ul class="fonctionnalite-list">
+              <li class="editable" contenteditable="true">Tableau de bord Power BI ou Grafana avec KPI de santé machines</li>
+              <li class="editable" contenteditable="true">Système d'alertes graduées : info, warning, critique selon niveau de risque</li>
+              <li class="editable" contenteditable="true">Vue calendaire des interventions recommandées et planifiées</li>
+              <li class="editable" contenteditable="true">Application mobile pour accès terrain aux responsables maintenance</li>
+            </ul>
+            <div style="margin-top: 15px;">
+              <span class="badge tech">Power BI</span>
+              <span class="badge tech">Grafana</span>
+              <span class="badge tech">API</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="couts-gains-section">
+          <div class="cout-card">
+            <div class="card-title-icon">💰</div>
+            <div class="card-title-text">Coût estimé</div>
+            <div class="card-content editable" contenteditable="true">
+              <strong>Licences :</strong> 15k€/an (Azure IoT Hub + ML + Power BI)<br>
+              <strong>Hardware IoT :</strong> 25k€ (capteurs + gateway pour 10 machines)<br>
+              <strong>Développement :</strong> 40k€ (modèles ML + intégration + dashboards)<br>
+              <strong>Formation :</strong> 5k€ (équipe maintenance)<br>
+              <strong>Accompagnement :</strong> 30 jours consultant à 1200€ = 36k€<br><br>
+              <strong>Total première année : 121k€</strong><br>
+              <strong>Coûts récurrents : 20k€/an</strong>
+            </div>
+          </div>
+
+          <div class="gain-card">
+            <div class="card-title-icon">📈</div>
+            <div class="card-title-text">Gains estimés</div>
+            <div class="card-content editable" contenteditable="true">
+              <strong>Réduction arrêts non planifiés :</strong> -60% → 270k€/an<br>
+              <strong>Optimisation coûts maintenance :</strong> -25% → 80k€/an<br>
+              <strong>Réduction stocks pièces détachées :</strong> -20% → 35k€/an<br>
+              <strong>Amélioration disponibilité machines :</strong> +10% TRS<br><br>
+              <strong>Total gains annuels : 385k€</strong><br>
+              <strong>ROI : 4 mois</strong><br>
+              <strong>Gains cumulés 3 ans : 1,15M€</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="mise-en-oeuvre-section">
+          <div class="mise-en-oeuvre-title">Mise en œuvre - Planning sur 6 mois</div>
+
+          <div class="etape-block">
+            <div class="fonctionnalite-title editable" contenteditable="true">
+              Étape 1 : Audit technique et sélection des machines pilotes (M+1)
+            </div>
+            <div class="fonctionnalite-description editable" contenteditable="true">
+              Identification des 3 machines critiques pour le POC, analyse des données disponibles et définition des KPI de succès.
+            </div>
+            <ul class="fonctionnalite-list">
+              <li class="editable" contenteditable="true">Cartographie des machines et criticité (AMDEC)</li>
+              <li class="editable" contenteditable="true">Collecte historique des pannes et interventions maintenance</li>
+              <li class="editable" contenteditable="true">Vérification compatibilité technique (automates, connectivité)</li>
+              <li class="editable" contenteditable="true">Définition objectifs : réduction 60% arrêts, prédiction 48h à l'avance</li>
+            </ul>
+          </div>
+
+          <div class="etape-block">
+            <div class="fonctionnalite-title editable" contenteditable="true">
+              Étape 2 : Installation capteurs et infrastructure data (M+2 à M+3)
+            </div>
+            <div class="fonctionnalite-description editable" contenteditable="true">
+              Déploiement des capteurs IoT, mise en place de la plateforme cloud et des pipelines de données.
+            </div>
+            <ul class="fonctionnalite-list">
+              <li class="editable" contenteditable="true">Installation capteurs sur machines pilotes (vibrations, température, courant)</li>
+              <li class="editable" contenteditable="true">Configuration Azure IoT Hub et stockage Data Lake</li>
+              <li class="editable" contenteditable="true">Mise en place pipelines ETL pour traitement données en temps réel</li>
+              <li class="editable" contenteditable="true">Tests de connectivité et validation qualité des données collectées</li>
+            </ul>
+          </div>
+
+          <div class="etape-block">
+            <div class="fonctionnalite-title editable" contenteditable="true">
+              Étape 3 : Développement et entraînement des modèles IA (M+3 à M+4)
+            </div>
+            <div class="fonctionnalite-description editable" contenteditable="true">
+              Construction des modèles de Machine Learning avec historique de données, tests et validation de la performance prédictive.
+            </div>
+            <ul class="fonctionnalite-list">
+              <li class="editable" contenteditable="true">Labellisation données historiques (pannes vs fonctionnement normal)</li>
+              <li class="editable" contenteditable="true">Développement modèles ML (Isolation Forest, LSTM, Random Forest)</li>
+              <li class="editable" contenteditable="true">Entraînement et optimisation hyperparamètres</li>
+              <li class="editable" contenteditable="true">Validation performance : précision >85%, rappel >90%</li>
+            </ul>
+          </div>
+
+          <div class="etape-block">
+            <div class="fonctionnalite-title editable" contenteditable="true">
+              Étape 4 : Déploiement dashboards et système d'alertes (M+5)
+            </div>
+            <div class="fonctionnalite-description editable" contenteditable="true">
+              Création des interfaces de pilotage, configuration des alertes et formation des équipes maintenance.
+            </div>
+            <ul class="fonctionnalite-list">
+              <li class="editable" contenteditable="true">Développement dashboard Power BI avec scores de santé machines</li>
+              <li class="editable" contenteditable="true">Configuration alertes multi-canal (email, SMS, Teams)</li>
+              <li class="editable" contenteditable="true">Formation équipe maintenance à l'utilisation du système (2 jours)</li>
+              <li class="editable" contenteditable="true">Définition processus d'intervention suite aux alertes</li>
+            </ul>
+          </div>
+
+          <div class="etape-block">
+            <div class="fonctionnalite-title editable" contenteditable="true">
+              Étape 5 : Phase pilote et ajustements avant généralisation (M+6)
+            </div>
+            <div class="fonctionnalite-description editable" contenteditable="true">
+              Exploitation en conditions réelles sur 3 mois, mesure des résultats et ajustement des modèles avant déploiement sur toutes les machines.
+            </div>
+            <ul class="fonctionnalite-list">
+              <li class="editable" contenteditable="true">Suivi quotidien des prédictions et validation terrain</li>
+              <li class="editable" contenteditable="true">Mesure des gains réels vs objectifs (KPI tracking)</li>
+              <li class="editable" contenteditable="true">Ajustements modèles selon retours terrain (faux positifs/négatifs)</li>
+              <li class="editable" contenteditable="true">Présentation résultats direction et plan de déploiement étendu</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top: 40px; padding: 30px; background: var(--pulsa-gris-clair); border-radius: 12px;">
+          <h4 style="font-size: 20px; font-weight: 700; margin-bottom: 20px; color: var(--pulsa-noir);">Alternatives Techniques</h4>
+          
+          <div style="margin-bottom: 20px;">
+            <strong style="color: var(--pulsa-accent);">🔧 Solution ERP Native :</strong>
+            <div class="editable" contenteditable="true" style="margin-top: 8px;">
+              Si votre ERP dispose d'un module GMAO avancé (ex: SAP Predictive Maintenance, Oracle IoT), possibilité d'activer ces fonctionnalités natives. Avantage : intégration directe. Inconvénient : fonctionnalités souvent moins avancées et coûts de licence élevés (30-50k€/an).
+            </div>
+          </div>
+
+          <div>
+            <strong style="color: var(--pulsa-accent);">💻 Solution Open Source :</strong>
+            <div class="editable" contenteditable="true" style="margin-top: 8px;">
+              Stack open-source complète : InfluxDB (stockage séries temporelles) + Telegraf (collecte) + Grafana (visu) + Python/Scikit-learn (ML). Coût : 0€ licences, mais nécessite compétences internes fortes ou accompagnement consultant plus long (+20 jours). ROI similaire mais délais plus longs.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIAGRAMME REACT FLOW (séparé pour copier-coller) -->
+<div class="page light">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SLIDE 05</div>
+      <h2 class="section-title">Schéma Fonctionnel</h2>
+      <p class="section-subtitle">Architecture du cas d'usage #1 - Maintenance Prédictive</p>
+    </div>
+
+    <div class="diagram-container">
+      <div class="diagram-header">
+        <h3 class="diagram-title">Architecture Technique - Maintenance Prédictive</h3>
+        <p class="diagram-subtitle">Flux de données et composants système</p>
+      </div>
+
+      <div id="react-flow-wrapper"></div>
+
+      <button class="copy-btn" onclick="captureAndDownloadDiagram()" style="margin-top: 30px;">
+        📸 Télécharger le diagramme (PNG)
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========================================
+// FONCTIONS UTILITAIRES
+// ========================================
+
+let editMode = false;
+
+function toggleEditMode() {
+  editMode = !editMode;
+  const editables = document.querySelectorAll('.editable, [contenteditable="true"]');
+  
+  if (editMode) {
+    alert('✏️ Mode édition activé ! Cliquez sur les éléments pour les modifier.');
+  } else {
+    alert('💾 Mode édition désactivé.');
+  }
+}
+
+function saveContent() {
+  const content = document.documentElement.outerHTML;
+  const blob = new Blob([content], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const entreprise = document.querySelector('.cover-client').textContent.trim();
+  a.download = `diagnostic-dataIA-${entreprise}-${new Date().toISOString().split('T')[0]}.html`;
+  a.click();
+  URL.revokeObjectURL(url);
+  alert('✅ Diagnostic sauvegardé avec succès !');
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function copySlideContent(slideId) {
+  const element = document.getElementById(slideId);
+  if (!element) {
+    alert('❌ Élément non trouvé');
+    return;
+  }
+  
+  const range = document.createRange();
+  range.selectNode(element);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+  
+  try {
+    document.execCommand('copy');
+    alert('✅ Contenu copié ! Collez-le dans votre slide PowerPoint (Ctrl+V)');
+  } catch (err) {
+    alert('❌ Erreur lors de la copie. Utilisez Ctrl+C manuellement.');
+  }
+  
+  window.getSelection().removeAllRanges();
+}
+
+function captureAndDownloadDiagram() {
+  alert('📸 Fonctionnalité de capture : Utilisez l\'outil de capture d\'écran de votre système ou un outil comme Snagit pour capturer le diagramme.');
+}
+
+// ========================================
+// REACT FLOW DIAGRAM
+// ========================================
+
+// Initialisation du diagramme React Flow
+document.addEventListener('DOMContentLoaded', function() {
+  // Note: React Flow nécessite React en mode développement
+  // Pour une version de production, il faudrait builder le composant séparément
+  
+  const diagramHTML = `
+    <div style="padding: 40px; text-align: center; background: var(--pulsa-gris-clair); border-radius: 12px; min-height: 400px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+      <div style="font-size: 64px; margin-bottom: 20px;">📊</div>
+      <h3 style="font-size: 24px; color: var(--pulsa-noir); margin-bottom: 15px;">Diagramme React Flow</h3>
+      <p style="font-size: 16px; color: var(--pulsa-gris-moyen); max-width: 600px;">
+        Le diagramme interactif sera généré ici avec React Flow. Vous pouvez également créer votre propre schéma dans PowerPoint ou utiliser un outil comme Draw.io.
+      </p>
+      <div style="margin-top: 30px; text-align: left; background: white; padding: 30px; border-radius: 12px; max-width: 800px;">
+        <strong style="color: var(--pulsa-accent); font-size: 18px; margin-bottom: 15px; display: block;">Architecture proposée :</strong>
+        <div style="font-size: 15px; line-height: 2;">
+          <strong>1. Couche IoT :</strong> Capteurs → Gateway → Cloud<br>
+          <strong>2. Couche Data :</strong> Azure IoT Hub → Data Lake → ETL<br>
+          <strong>3. Couche ML :</strong> Azure ML → Modèles prédictifs → Scoring<br>
+          <strong>4. Couche Application :</strong> Power BI → Alertes → Mobile<br>
+          <strong>5. Couche Métier :</strong> GMAO → Planification → Intervention
+        </div>
+      </div>
+    </div>
+  `;
+  
+  const wrapper = document.getElementById('react-flow-wrapper');
+  if (wrapper) {
+    wrapper.innerHTML = diagramHTML;
+  }
+});
+
+console.log('✅ Template Diagnostic Data IA - Format Bpifrance chargé avec succès !');
+console.log('🎨 Design Pulsa Conseil appliqué');
+console.log('📋 Prêt pour copier-coller dans PowerPoint');
+</script>
+
+</body>
+</html>

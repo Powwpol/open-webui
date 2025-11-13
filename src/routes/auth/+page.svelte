@@ -192,7 +192,7 @@
 	bind:show={onboarding}
 	getStartedHandler={() => {
 		onboarding = false;
-		mode = $config?.features.enable_ldap ? 'ldap' : 'signup';
+		mode = $config?.features.enable_ldap ? 'ldap' : 'signin';
 	}}
 />
 

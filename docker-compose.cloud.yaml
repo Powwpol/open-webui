@@ -1,20 +1,15 @@
-# Pulsai Complete Docker Compose
-# Includes: Frontend, Backend, Ollama, Redis, MCP Server
+version: '3.8'
+
+# PulsAI - Utilisation image depuis GitHub Container Registry
+# Source: github.com/Powwpol/open-webui
 
 services:
   # ======================================
-  # Pulsai Backend (FastAPI)
+  # Pulsai Backend (Image depuis ghcr.io)
   # ======================================
   pulsai-backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        USE_CUDA: "false"
-        USE_OLLAMA: "false"
-        USE_SLIM: "false"
-    image: pulsai/backend:latest
-    container_name: pulsai-backend
+    image: ghcr.io/powwpol/open-webui:latest
+    container_name: pulsai-backend-cloud
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -32,14 +27,11 @@ services:
       # Ollama
       - OLLAMA_BASE_URL=http://pulsai-ollama:11434
       
-      # MCP Configuration
-      - MCP_CONFIG_PATH=/app/config/mcp-servers.yaml
-      
       # Security
-      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-change-me-to-a-secure-secret}
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-change-me-secure-secret}
       
       # Features
-      - ENABLE_SIGNUP=true
+      - ENABLE_SIGNUP=${ENABLE_SIGNUP:-true}
       - ENABLE_WEBHOOKS=true
       - ANONYMIZED_TELEMETRY=false
       
@@ -47,13 +39,14 @@ services:
       - LOG_LEVEL=INFO
     
     volumes:
-      - pulsai-data:/app/backend/data
+      - pulsai-data-cloud:/app/backend/data
       - ./config:/app/config:ro
     
     depends_on:
-      - pulsai-redis
-      - pulsai-ollama
-      - pulsai-mcp
+      pulsai-redis:
+        condition: service_healthy
+      pulsai-ollama:
+        condition: service_started
     
     networks:
       - pulsai-network
@@ -72,7 +65,7 @@ services:
     image: redis:7-alpine
     container_name: pulsai-redis
     restart: unless-stopped
-    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes
     ports:
       - "6379:6379"
     volumes:
@@ -98,6 +91,12 @@ services:
       - pulsai-ollama-data:/root/.ollama
     networks:
       - pulsai-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     # Uncomment for GPU support
     # deploy:
     #   resources:
@@ -107,35 +106,12 @@ services:
     #           count: all
     #           capabilities: [gpu]
 
-  # ======================================
-  # Pulsai MCP Server (Model Context Protocol)
-  # ======================================
-  pulsai-mcp:
-    build:
-      context: ./mcp-server
-      dockerfile: Dockerfile
-    image: pulsai/mcp:latest
-    container_name: pulsai-mcp
-    restart: unless-stopped
-    ports:
-      - "8001:8001"
-    environment:
-      - PORT=8001
-      - LOG_LEVEL=INFO
-    networks:
-      - pulsai-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
 # ======================================
 # Volumes
 # ======================================
 volumes:
-  pulsai-data:
-    name: pulsai-data
+  pulsai-data-cloud:
+    name: pulsai-data-cloud
   pulsai-redis-data:
     name: pulsai-redis-data
   pulsai-ollama-data:
@@ -146,6 +122,6 @@ volumes:
 # ======================================
 networks:
   pulsai-network:
-    name: pulsai-network
+    name: pulsai-network-cloud
     driver: bridge
 

@@ -53,7 +53,9 @@ COPY --from=builder /usr/local/lib/python3.11 /usr/local/lib/python3.11
 COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy application code from LOCAL
-COPY backend/open_webui /app/backend/open_webui
+# In the local repo the package directory is named 'pulsai'.
+# We place it under /app/backend/open_webui to match runtime import paths.
+COPY backend/pulsai /app/backend/open_webui
 COPY backend/migrations /app/backend/migrations
 COPY backend/alembic.ini /app/backend/alembic.ini
 COPY backend/start.sh /app/backend/start.sh
