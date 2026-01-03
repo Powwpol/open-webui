@@ -13,7 +13,7 @@ from croniter import croniter
 from .models import FineTuneSchedule, FineTuneJob, FineTuneDataset
 from .dataset_builder import DatasetBuilder
 from .job_runner import JobRunner
-from open_webui.quality.models import QualityScore
+from pulsai.quality.models import QualityScore
 
 
 class FineTuneScheduler:

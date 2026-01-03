@@ -3,14 +3,14 @@ from typing import Optional
 import ssl
 from elasticsearch.helpers import bulk, scan
 
-from open_webui.retrieval.vector.utils import process_metadata
-from open_webui.retrieval.vector.main import (
+from pulsai.retrieval.vector.utils import process_metadata
+from pulsai.retrieval.vector.main import (
     VectorDBBase,
     VectorItem,
     SearchResult,
     GetResult,
 )
-from open_webui.config import (
+from pulsai.config import (
     ELASTICSEARCH_URL,
     ELASTICSEARCH_CA_CERTS,
     ELASTICSEARCH_API_KEY,

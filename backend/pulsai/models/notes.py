@@ -4,10 +4,10 @@ import uuid
 from typing import Optional
 from functools import lru_cache
 
-from open_webui.internal.db import Base, get_db
-from open_webui.models.groups import Groups
-from open_webui.utils.access_control import has_access
-from open_webui.models.users import Users, UserResponse
+from pulsai.internal.db import Base, get_db
+from pulsai.models.groups import Groups
+from pulsai.utils.access_control import has_access
+from pulsai.models.users import Users, UserResponse
 
 
 from pydantic import BaseModel, ConfigDict

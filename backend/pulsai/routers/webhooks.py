@@ -9,15 +9,15 @@ from typing import List, Dict, Any, Optional
 from pydantic import BaseModel, HttpUrl, Field
 from loguru import logger as log
 
-from open_webui.webhooks import (
+from pulsai.webhooks import (
     WebhookEvent,
     EventType,
     WebhookDispatcher,
     WebhookRegistry,
     WebhookSecurity
 )
-from open_webui.webhooks.registry import WebhookSubscription
-from open_webui.webhooks.events import EventFilter
+from pulsai.webhooks.registry import WebhookSubscription
+from pulsai.webhooks.events import EventFilter
 
 
 router = APIRouter()

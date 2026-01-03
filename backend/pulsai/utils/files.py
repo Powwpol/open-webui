@@ -1,4 +1,4 @@
-from open_webui.routers.images import (
+from pulsai.routers.images import (
     load_b64_image_data,
     upload_image,
 )
@@ -11,7 +11,7 @@ from fastapi import (
     UploadFile,
 )
 
-from open_webui.routers.files import upload_file_handler
+from pulsai.routers.files import upload_file_handler
 
 import mimetypes
 import base64

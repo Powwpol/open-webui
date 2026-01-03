@@ -2,14 +2,14 @@ from opensearchpy import OpenSearch
 from opensearchpy.helpers import bulk
 from typing import Optional
 
-from open_webui.retrieval.vector.utils import process_metadata
-from open_webui.retrieval.vector.main import (
+from pulsai.retrieval.vector.utils import process_metadata
+from pulsai.retrieval.vector.main import (
     VectorDBBase,
     VectorItem,
     SearchResult,
     GetResult,
 )
-from open_webui.config import (
+from pulsai.config import (
     OPENSEARCH_URI,
     OPENSEARCH_SSL,
     OPENSEARCH_CERT_VERIFY,

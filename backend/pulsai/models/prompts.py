@@ -1,14 +1,14 @@
 import time
 from typing import Optional
 
-from open_webui.internal.db import Base, get_db
-from open_webui.models.groups import Groups
-from open_webui.models.users import Users, UserResponse
+from pulsai.internal.db import Base, get_db
+from pulsai.models.groups import Groups
+from pulsai.models.users import Users, UserResponse
 
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import BigInteger, Column, String, Text, JSON
 
-from open_webui.utils.access_control import has_access
+from pulsai.utils.access_control import has_access
 
 ####################
 # Prompts DB Schema

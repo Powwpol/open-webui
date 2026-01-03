@@ -6,14 +6,14 @@ import json
 import logging
 from typing import Optional
 
-from open_webui.retrieval.vector.utils import process_metadata
-from open_webui.retrieval.vector.main import (
+from pulsai.retrieval.vector.utils import process_metadata
+from pulsai.retrieval.vector.main import (
     VectorDBBase,
     VectorItem,
     SearchResult,
     GetResult,
 )
-from open_webui.config import (
+from pulsai.config import (
     MILVUS_URI,
     MILVUS_DB,
     MILVUS_TOKEN,
@@ -25,7 +25,7 @@ from open_webui.config import (
     MILVUS_DISKANN_MAX_DEGREE,
     MILVUS_DISKANN_SEARCH_LIST_SIZE,
 )
-from open_webui.env import SRC_LOG_LEVELS
+from pulsai.env import SRC_LOG_LEVELS
 
 log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS["RAG"])

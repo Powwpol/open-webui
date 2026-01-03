@@ -6,8 +6,8 @@ from typing import Optional
 import logging
 import re
 
-from open_webui.utils.chat import generate_chat_completion
-from open_webui.utils.task import (
+from pulsai.utils.chat import generate_chat_completion
+from pulsai.utils.task import (
     title_generation_template,
     follow_up_generation_template,
     query_generation_template,
@@ -17,14 +17,14 @@ from open_webui.utils.task import (
     emoji_generation_template,
     moa_response_generation_template,
 )
-from open_webui.utils.auth import get_admin_user, get_verified_user
-from open_webui.constants import TASKS
+from pulsai.utils.auth import get_admin_user, get_verified_user
+from pulsai.constants import TASKS
 
-from open_webui.routers.pipelines import process_pipeline_inlet_filter
+from pulsai.routers.pipelines import process_pipeline_inlet_filter
 
-from open_webui.utils.task import get_task_model_id
+from pulsai.utils.task import get_task_model_id
 
-from open_webui.config import (
+from pulsai.config import (
     DEFAULT_TITLE_GENERATION_PROMPT_TEMPLATE,
     DEFAULT_FOLLOW_UP_GENERATION_PROMPT_TEMPLATE,
     DEFAULT_TAGS_GENERATION_PROMPT_TEMPLATE,
@@ -34,7 +34,7 @@ from open_webui.config import (
     DEFAULT_EMOJI_GENERATION_PROMPT_TEMPLATE,
     DEFAULT_MOA_GENERATION_PROMPT_TEMPLATE,
 )
-from open_webui.env import SRC_LOG_LEVELS
+from pulsai.env import SRC_LOG_LEVELS
 
 
 log = logging.getLogger(__name__)

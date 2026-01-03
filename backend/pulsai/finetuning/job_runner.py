@@ -156,7 +156,7 @@ class JobRunner:
         """
         
         try:
-            from open_webui.env import OLLAMA_API_BASE_URL
+            from pulsai.env import OLLAMA_API_BASE_URL
             import httpx
             
             # Get dataset
@@ -230,7 +230,7 @@ PARAMETER num_ctx 2048
         """
         
         try:
-            from open_webui.env import VLLM_API_BASE_URL
+            from pulsai.env import VLLM_API_BASE_URL
             import httpx
             
             # Get dataset

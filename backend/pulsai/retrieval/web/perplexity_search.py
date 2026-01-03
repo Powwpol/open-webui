@@ -2,8 +2,8 @@ import logging
 from typing import Optional, Literal
 import requests
 
-from open_webui.retrieval.web.main import SearchResult, get_filtered_results
-from open_webui.env import SRC_LOG_LEVELS
+from pulsai.retrieval.web.main import SearchResult, get_filtered_results
+from pulsai.env import SRC_LOG_LEVELS
 
 
 log = logging.getLogger(__name__)

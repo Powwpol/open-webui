@@ -3,9 +3,9 @@ import time
 import uuid
 from typing import Optional
 
-from open_webui.internal.db import Base, get_db
-from open_webui.models.tags import TagModel, Tag, Tags
-from open_webui.models.users import Users, UserNameResponse
+from pulsai.internal.db import Base, get_db
+from pulsai.models.tags import TagModel, Tag, Tags
+from pulsai.models.users import Users, UserNameResponse
 
 
 from pydantic import BaseModel, ConfigDict

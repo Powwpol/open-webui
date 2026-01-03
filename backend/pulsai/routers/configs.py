@@ -5,20 +5,20 @@ import aiohttp
 
 from typing import Optional
 
-from open_webui.utils.auth import get_admin_user, get_verified_user
-from open_webui.config import get_config, save_config
-from open_webui.config import BannerModel
+from pulsai.utils.auth import get_admin_user, get_verified_user
+from pulsai.config import get_config, save_config
+from pulsai.config import BannerModel
 
-from open_webui.utils.tools import (
+from pulsai.utils.tools import (
     get_tool_server_data,
     get_tool_server_url,
     set_tool_servers,
 )
-from open_webui.utils.mcp.client import MCPClient
+from pulsai.utils.mcp.client import MCPClient
 
-from open_webui.env import SRC_LOG_LEVELS
+from pulsai.env import SRC_LOG_LEVELS
 
-from open_webui.utils.oauth import (
+from pulsai.utils.oauth import (
     get_discovery_urls,
     get_oauth_client_info_with_dynamic_client_registration,
     encrypt_data,

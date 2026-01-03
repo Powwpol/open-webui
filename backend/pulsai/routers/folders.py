@@ -8,29 +8,29 @@ from pydantic import BaseModel
 import mimetypes
 
 
-from open_webui.models.folders import (
+from pulsai.models.folders import (
     FolderForm,
     FolderUpdateForm,
     FolderModel,
     FolderNameIdResponse,
     Folders,
 )
-from open_webui.models.chats import Chats
-from open_webui.models.files import Files
-from open_webui.models.knowledge import Knowledges
+from pulsai.models.chats import Chats
+from pulsai.models.files import Files
+from pulsai.models.knowledge import Knowledges
 
 
-from open_webui.config import UPLOAD_DIR
-from open_webui.env import SRC_LOG_LEVELS
-from open_webui.constants import ERROR_MESSAGES
+from pulsai.config import UPLOAD_DIR
+from pulsai.env import SRC_LOG_LEVELS
+from pulsai.constants import ERROR_MESSAGES
 
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status, Request
 from fastapi.responses import FileResponse, StreamingResponse
 
 
-from open_webui.utils.auth import get_admin_user, get_verified_user
-from open_webui.utils.access_control import has_permission
+from pulsai.utils.auth import get_admin_user, get_verified_user
+from pulsai.utils.access_control import has_permission
 
 
 log = logging.getLogger(__name__)

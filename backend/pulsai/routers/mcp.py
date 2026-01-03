@@ -9,10 +9,10 @@ from fastapi.responses import StreamingResponse
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel
 
-from open_webui.mcp.manager import MCPManager
-from open_webui.mcp.validation import MCPServerConfig
-from open_webui.mcp.protocols import MCPServerInfo, MCPToolSchema, MCPToolRequest, MCPToolResponse
-from open_webui.utils.logger import get_logger
+from pulsai.mcp.manager import MCPManager
+from pulsai.mcp.validation import MCPServerConfig
+from pulsai.mcp.protocols import MCPServerInfo, MCPToolSchema, MCPToolRequest, MCPToolResponse
+from pulsai.utils.logger import get_logger
 
 log = get_logger(__name__)
 

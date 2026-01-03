@@ -5,7 +5,7 @@ import json
 import asyncio
 import logging
 
-from open_webui.models.models import (
+from pulsai.models.models import (
     ModelForm,
     ModelModel,
     ModelResponse,
@@ -14,7 +14,7 @@ from open_webui.models.models import (
 )
 
 from pydantic import BaseModel
-from open_webui.constants import ERROR_MESSAGES
+from pulsai.constants import ERROR_MESSAGES
 from fastapi import (
     APIRouter,
     Depends,
@@ -26,9 +26,9 @@ from fastapi import (
 from fastapi.responses import FileResponse, StreamingResponse
 
 
-from open_webui.utils.auth import get_admin_user, get_verified_user
-from open_webui.utils.access_control import has_access, has_permission
-from open_webui.config import BYPASS_ADMIN_ACCESS_CONTROL, STATIC_DIR
+from pulsai.utils.auth import get_admin_user, get_verified_user
+from pulsai.utils.access_control import has_access, has_permission
+from pulsai.config import BYPASS_ADMIN_ACCESS_CONTROL, STATIC_DIR
 
 log = logging.getLogger(__name__)
 

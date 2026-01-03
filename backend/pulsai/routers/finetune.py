@@ -9,10 +9,10 @@ from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 from loguru import logger as log
 
-from open_webui.finetuning.dataset_builder import DatasetBuilder
-from open_webui.finetuning.job_runner import JobRunner
-from open_webui.finetuning.scheduler import FineTuneScheduler
-from open_webui.finetuning.models import FineTuneDataset, FineTuneJob, FineTuneSchedule
+from pulsai.finetuning.dataset_builder import DatasetBuilder
+from pulsai.finetuning.job_runner import JobRunner
+from pulsai.finetuning.scheduler import FineTuneScheduler
+from pulsai.finetuning.models import FineTuneDataset, FineTuneJob, FineTuneSchedule
 
 
 router = APIRouter()

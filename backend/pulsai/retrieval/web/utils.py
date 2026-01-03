@@ -24,10 +24,10 @@ from langchain_community.document_loaders import PlaywrightURLLoader, WebBaseLoa
 from langchain_community.document_loaders.firecrawl import FireCrawlLoader
 from langchain_community.document_loaders.base import BaseLoader
 from langchain_core.documents import Document
-from open_webui.retrieval.loaders.tavily import TavilyLoader
-from open_webui.retrieval.loaders.external_web import ExternalWebLoader
-from open_webui.constants import ERROR_MESSAGES
-from open_webui.config import (
+from pulsai.retrieval.loaders.tavily import TavilyLoader
+from pulsai.retrieval.loaders.external_web import ExternalWebLoader
+from pulsai.constants import ERROR_MESSAGES
+from pulsai.config import (
     ENABLE_RAG_LOCAL_WEB_FETCH,
     PLAYWRIGHT_WS_URL,
     PLAYWRIGHT_TIMEOUT,
@@ -39,7 +39,7 @@ from open_webui.config import (
     EXTERNAL_WEB_LOADER_URL,
     EXTERNAL_WEB_LOADER_API_KEY,
 )
-from open_webui.env import SRC_LOG_LEVELS, AIOHTTP_CLIENT_SESSION_SSL
+from pulsai.env import SRC_LOG_LEVELS, AIOHTTP_CLIENT_SESSION_SSL
 
 log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS["RAG"])

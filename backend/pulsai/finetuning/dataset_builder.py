@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from loguru import logger as log
 
 from .models import FineTuneDataset, FineTuneSample
-from open_webui.quality.models import QualityScore
+from pulsai.quality.models import QualityScore
 
 
 class DatasetBuilder:
@@ -143,7 +143,7 @@ class DatasetBuilder:
         
         try:
             # Import here to avoid circular imports
-            from open_webui.models.chats import Chats, Messages
+            from pulsai.models.chats import Chats, Messages
             
             # Get the message
             message = Messages.get(Messages.id == message_id)

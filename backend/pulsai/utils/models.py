@@ -6,28 +6,28 @@ import sys
 from aiocache import cached
 from fastapi import Request
 
-from open_webui.routers import openai, ollama
-from open_webui.functions import get_function_models
+from pulsai.routers import openai, ollama
+from pulsai.functions import get_function_models
 
 
-from open_webui.models.functions import Functions
-from open_webui.models.models import Models
+from pulsai.models.functions import Functions
+from pulsai.models.models import Models
 
 
-from open_webui.utils.plugin import (
+from pulsai.utils.plugin import (
     load_function_module_by_id,
     get_function_module_from_cache,
 )
-from open_webui.utils.access_control import has_access
+from pulsai.utils.access_control import has_access
 
 
-from open_webui.config import (
+from pulsai.config import (
     BYPASS_ADMIN_ACCESS_CONTROL,
     DEFAULT_ARENA_MODEL,
 )
 
-from open_webui.env import BYPASS_MODEL_ACCESS_CONTROL, SRC_LOG_LEVELS, GLOBAL_LOG_LEVEL
-from open_webui.models.users import UserModel
+from pulsai.env import BYPASS_MODEL_ACCESS_CONTROL, SRC_LOG_LEVELS, GLOBAL_LOG_LEVEL
+from pulsai.models.users import UserModel
 
 
 logging.basicConfig(stream=sys.stdout, level=GLOBAL_LOG_LEVEL)

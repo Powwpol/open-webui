@@ -4,10 +4,10 @@ import time
 from typing import Optional
 import uuid
 
-from open_webui.internal.db import Base, get_db
-from open_webui.env import SRC_LOG_LEVELS
+from pulsai.internal.db import Base, get_db
+from pulsai.env import SRC_LOG_LEVELS
 
-from open_webui.models.files import FileMetadataResponse
+from pulsai.models.files import FileMetadataResponse
 
 
 from pydantic import BaseModel, ConfigDict

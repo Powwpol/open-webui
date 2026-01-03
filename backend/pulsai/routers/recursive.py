@@ -9,9 +9,9 @@ from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 from loguru import logger as log
 
-from open_webui.recursive.executor import RecursiveExecutor
-from open_webui.recursive.tree import ChatTree
-from open_webui.recursive.models import RecursiveChat, RecursiveTrigger, RecursiveExecution
+from pulsai.recursive.executor import RecursiveExecutor
+from pulsai.recursive.tree import ChatTree
+from pulsai.recursive.models import RecursiveChat, RecursiveTrigger, RecursiveExecution
 
 
 router = APIRouter()

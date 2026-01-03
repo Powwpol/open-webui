@@ -31,45 +31,45 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter, TokenTextSpl
 from langchain_text_splitters import MarkdownHeaderTextSplitter
 from langchain_core.documents import Document
 
-from open_webui.models.files import FileModel, Files
-from open_webui.models.knowledge import Knowledges
-from open_webui.storage.provider import Storage
+from pulsai.models.files import FileModel, Files
+from pulsai.models.knowledge import Knowledges
+from pulsai.storage.provider import Storage
 
 
-from open_webui.retrieval.vector.factory import VECTOR_DB_CLIENT
+from pulsai.retrieval.vector.factory import VECTOR_DB_CLIENT
 
 # Document loaders
-from open_webui.retrieval.loaders.main import Loader
-from open_webui.retrieval.loaders.youtube import YoutubeLoader
+from pulsai.retrieval.loaders.main import Loader
+from pulsai.retrieval.loaders.youtube import YoutubeLoader
 
 # Web search engines
-from open_webui.retrieval.web.main import SearchResult
-from open_webui.retrieval.web.utils import get_web_loader
-from open_webui.retrieval.web.ollama import search_ollama_cloud
-from open_webui.retrieval.web.perplexity_search import search_perplexity_search
-from open_webui.retrieval.web.brave import search_brave
-from open_webui.retrieval.web.kagi import search_kagi
-from open_webui.retrieval.web.mojeek import search_mojeek
-from open_webui.retrieval.web.bocha import search_bocha
-from open_webui.retrieval.web.duckduckgo import search_duckduckgo
-from open_webui.retrieval.web.google_pse import search_google_pse
-from open_webui.retrieval.web.jina_search import search_jina
-from open_webui.retrieval.web.searchapi import search_searchapi
-from open_webui.retrieval.web.serpapi import search_serpapi
-from open_webui.retrieval.web.searxng import search_searxng
-from open_webui.retrieval.web.yacy import search_yacy
-from open_webui.retrieval.web.serper import search_serper
-from open_webui.retrieval.web.serply import search_serply
-from open_webui.retrieval.web.serpstack import search_serpstack
-from open_webui.retrieval.web.tavily import search_tavily
-from open_webui.retrieval.web.bing import search_bing
-from open_webui.retrieval.web.exa import search_exa
-from open_webui.retrieval.web.perplexity import search_perplexity
-from open_webui.retrieval.web.sougou import search_sougou
-from open_webui.retrieval.web.firecrawl import search_firecrawl
-from open_webui.retrieval.web.external import search_external
+from pulsai.retrieval.web.main import SearchResult
+from pulsai.retrieval.web.utils import get_web_loader
+from pulsai.retrieval.web.ollama import search_ollama_cloud
+from pulsai.retrieval.web.perplexity_search import search_perplexity_search
+from pulsai.retrieval.web.brave import search_brave
+from pulsai.retrieval.web.kagi import search_kagi
+from pulsai.retrieval.web.mojeek import search_mojeek
+from pulsai.retrieval.web.bocha import search_bocha
+from pulsai.retrieval.web.duckduckgo import search_duckduckgo
+from pulsai.retrieval.web.google_pse import search_google_pse
+from pulsai.retrieval.web.jina_search import search_jina
+from pulsai.retrieval.web.searchapi import search_searchapi
+from pulsai.retrieval.web.serpapi import search_serpapi
+from pulsai.retrieval.web.searxng import search_searxng
+from pulsai.retrieval.web.yacy import search_yacy
+from pulsai.retrieval.web.serper import search_serper
+from pulsai.retrieval.web.serply import search_serply
+from pulsai.retrieval.web.serpstack import search_serpstack
+from pulsai.retrieval.web.tavily import search_tavily
+from pulsai.retrieval.web.bing import search_bing
+from pulsai.retrieval.web.exa import search_exa
+from pulsai.retrieval.web.perplexity import search_perplexity
+from pulsai.retrieval.web.sougou import search_sougou
+from pulsai.retrieval.web.firecrawl import search_firecrawl
+from pulsai.retrieval.web.external import search_external
 
-from open_webui.retrieval.utils import (
+from pulsai.retrieval.utils import (
     get_embedding_function,
     get_reranking_function,
     get_model_path,
@@ -78,13 +78,13 @@ from open_webui.retrieval.utils import (
     query_doc,
     query_doc_with_hybrid_search,
 )
-from open_webui.retrieval.vector.utils import filter_metadata
-from open_webui.utils.misc import (
+from pulsai.retrieval.vector.utils import filter_metadata
+from pulsai.utils.misc import (
     calculate_sha256_string,
 )
-from open_webui.utils.auth import get_admin_user, get_verified_user
+from pulsai.utils.auth import get_admin_user, get_verified_user
 
-from open_webui.config import (
+from pulsai.config import (
     ENV,
     RAG_EMBEDDING_MODEL_AUTO_UPDATE,
     RAG_EMBEDDING_MODEL_TRUST_REMOTE_CODE,
@@ -95,7 +95,7 @@ from open_webui.config import (
     RAG_EMBEDDING_CONTENT_PREFIX,
     RAG_EMBEDDING_QUERY_PREFIX,
 )
-from open_webui.env import (
+from pulsai.env import (
     SRC_LOG_LEVELS,
     DEVICE_TYPE,
     DOCKER,
@@ -105,7 +105,7 @@ from open_webui.env import (
     SENTENCE_TRANSFORMERS_CROSS_ENCODER_MODEL_KWARGS,
 )
 
-from open_webui.constants import ERROR_MESSAGES
+from pulsai.constants import ERROR_MESSAGES
 
 log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS["RAG"])
@@ -151,7 +151,7 @@ def get_rf(
     if reranking_model:
         if any(model in reranking_model for model in ["jinaai/jina-colbert-v2"]):
             try:
-                from open_webui.retrieval.models.colbert import ColBERT
+                from pulsai.retrieval.models.colbert import ColBERT
 
                 rf = ColBERT(
                     get_model_path(reranking_model, auto_update),
@@ -164,7 +164,7 @@ def get_rf(
         else:
             if engine == "external":
                 try:
-                    from open_webui.retrieval.models.external import ExternalReranker
+                    from pulsai.retrieval.models.external import ExternalReranker
 
                     rf = ExternalReranker(
                         url=external_reranker_url,

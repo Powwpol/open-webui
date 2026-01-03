@@ -266,8 +266,8 @@ class RecursiveExecutor:
         
         try:
             # Import inference router
-            from open_webui.inference.router import InferenceRouter
-            from open_webui.inference.base import InferenceRequest, ChatMessage
+            from pulsai.inference.router import InferenceRouter
+            from pulsai.inference.base import InferenceRequest, ChatMessage
             
             router = InferenceRouter()
             

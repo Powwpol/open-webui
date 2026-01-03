@@ -9,12 +9,12 @@ from fastapi.responses import Response, StreamingResponse, FileResponse
 from pydantic import BaseModel
 
 
-from open_webui.models.auths import Auths
-from open_webui.models.oauth_sessions import OAuthSessions
+from pulsai.models.auths import Auths
+from pulsai.models.oauth_sessions import OAuthSessions
 
-from open_webui.models.groups import Groups
-from open_webui.models.chats import Chats
-from open_webui.models.users import (
+from pulsai.models.groups import Groups
+from pulsai.models.chats import Chats
+from pulsai.models.users import (
     UserModel,
     UserListResponse,
     UserInfoListResponse,
@@ -26,17 +26,17 @@ from open_webui.models.users import (
 )
 
 
-from open_webui.socket.main import (
+from pulsai.socket.main import (
     get_active_status_by_user_id,
     get_active_user_ids,
     get_user_active_status,
 )
-from open_webui.constants import ERROR_MESSAGES
-from open_webui.env import SRC_LOG_LEVELS, STATIC_DIR
+from pulsai.constants import ERROR_MESSAGES
+from pulsai.env import SRC_LOG_LEVELS, STATIC_DIR
 
 
-from open_webui.utils.auth import get_admin_user, get_password_hash, get_verified_user
-from open_webui.utils.access_control import get_permissions, has_permission
+from pulsai.utils.auth import get_admin_user, get_password_hash, get_verified_user
+from pulsai.utils.access_control import get_permissions, has_permission
 
 
 log = logging.getLogger(__name__)

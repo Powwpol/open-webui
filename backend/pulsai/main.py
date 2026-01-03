@@ -56,17 +56,17 @@ from starsessions import (
 )
 from starsessions.stores.redis import RedisStore
 
-from open_webui.utils import logger
-from open_webui.utils.audit import AuditLevel, AuditLoggingMiddleware
-from open_webui.utils.logger import start_logger
-from open_webui.socket.main import (
+from pulsai.utils import logger
+from pulsai.utils.audit import AuditLevel, AuditLoggingMiddleware
+from pulsai.utils.logger import start_logger
+from pulsai.socket.main import (
     app as socket_app,
     periodic_usage_pool_cleanup,
     get_event_emitter,
     get_models_in_use,
     get_active_user_ids,
 )
-from open_webui.routers import (
+from pulsai.routers import (
     audio,
     images,
     ollama,
@@ -95,21 +95,21 @@ from open_webui.routers import (
     mcp,
 )
 
-from open_webui.routers.retrieval import (
+from pulsai.routers.retrieval import (
     get_embedding_function,
     get_reranking_function,
     get_ef,
     get_rf,
 )
 
-from open_webui.internal.db import Session, engine
+from pulsai.internal.db import Session, engine
 
-from open_webui.models.functions import Functions
-from open_webui.models.models import Models
-from open_webui.models.users import UserModel, Users
-from open_webui.models.chats import Chats
+from pulsai.models.functions import Functions
+from pulsai.models.models import Models
+from pulsai.models.users import UserModel, Users
+from pulsai.models.chats import Chats
 
-from open_webui.config import (
+from pulsai.config import (
     # Ollama
     ENABLE_OLLAMA_API,
     OLLAMA_BASE_URLS,
@@ -413,7 +413,7 @@ from open_webui.config import (
     AppConfig,
     reset_config,
 )
-from open_webui.env import (
+from pulsai.env import (
     LICENSE_KEY,
     AUDIT_EXCLUDED_PATHS,
     AUDIT_LOG_LEVEL,
@@ -451,39 +451,39 @@ from open_webui.env import (
 )
 
 
-from open_webui.utils.models import (
+from pulsai.utils.models import (
     get_all_models,
     get_all_base_models,
     check_model_access,
     get_filtered_models,
 )
-from open_webui.utils.chat import (
+from pulsai.utils.chat import (
     generate_chat_completion as chat_completion_handler,
     chat_completed as chat_completed_handler,
     chat_action as chat_action_handler,
 )
-from open_webui.utils.embeddings import generate_embeddings
-from open_webui.utils.middleware import process_chat_payload, process_chat_response
-from open_webui.utils.access_control import has_access
+from pulsai.utils.embeddings import generate_embeddings
+from pulsai.utils.middleware import process_chat_payload, process_chat_response
+from pulsai.utils.access_control import has_access
 
-from open_webui.utils.auth import (
+from pulsai.utils.auth import (
     get_license_data,
     get_http_authorization_cred,
     decode_token,
     get_admin_user,
     get_verified_user,
 )
-from open_webui.utils.plugin import install_tool_and_function_dependencies
-from open_webui.utils.oauth import (
+from pulsai.utils.plugin import install_tool_and_function_dependencies
+from pulsai.utils.oauth import (
     OAuthManager,
     OAuthClientManager,
     decrypt_data,
     OAuthClientInformationFull,
 )
-from open_webui.utils.security_headers import SecurityHeadersMiddleware
-from open_webui.utils.redis import get_redis_connection
+from pulsai.utils.security_headers import SecurityHeadersMiddleware
+from pulsai.utils.redis import get_redis_connection
 
-from open_webui.tasks import (
+from pulsai.tasks import (
     redis_task_command_listener,
     list_task_ids_by_item_id,
     create_task,
@@ -491,10 +491,10 @@ from open_webui.tasks import (
     list_tasks,
 )  # Import from tasks.py
 
-from open_webui.utils.redis import get_sentinels_from_env
+from pulsai.utils.redis import get_sentinels_from_env
 
 
-from open_webui.constants import ERROR_MESSAGES
+from pulsai.constants import ERROR_MESSAGES
 
 
 if SAFE_MODE:
@@ -596,14 +596,14 @@ async def lifespan(app: FastAPI):
         )
 
     # Initialize MCP system
-    from open_webui.mcp.manager import MCPManager
-    from open_webui.mcp.config import MCPConfig
+    from pulsai.mcp.manager import MCPManager
+    from pulsai.mcp.config import MCPConfig
     
     log.info("Initializing MCP system...")
     mcp_manager_instance = MCPManager(config_path=MCPConfig.CONFIG_PATH)
     
     # Make manager available to router
-    import open_webui.routers.mcp as mcp_router
+    import pulsai.routers.mcp as mcp_router
     mcp_router.mcp_manager = mcp_manager_instance
     
     # Start MCP manager
@@ -658,7 +658,7 @@ app.state.LICENSE_METADATA = None
 ########################################
 
 if ENABLE_OTEL:
-    from open_webui.utils.telemetry.setup import setup as setup_opentelemetry
+    from pulsai.utils.telemetry.setup import setup as setup_opentelemetry
 
     setup_opentelemetry(app=app, db_engine=engine)
 

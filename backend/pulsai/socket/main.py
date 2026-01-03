@@ -9,16 +9,16 @@ from typing import Dict, Set
 from redis import asyncio as aioredis
 import pycrdt as Y
 
-from open_webui.models.users import Users, UserNameResponse
-from open_webui.models.channels import Channels
-from open_webui.models.chats import Chats
-from open_webui.models.notes import Notes, NoteUpdateForm
-from open_webui.utils.redis import (
+from pulsai.models.users import Users, UserNameResponse
+from pulsai.models.channels import Channels
+from pulsai.models.chats import Chats
+from pulsai.models.notes import Notes, NoteUpdateForm
+from pulsai.utils.redis import (
     get_sentinels_from_env,
     get_sentinel_url_from_env,
 )
 
-from open_webui.env import (
+from pulsai.env import (
     ENABLE_WEBSOCKET_SUPPORT,
     WEBSOCKET_MANAGER,
     WEBSOCKET_REDIS_URL,
@@ -28,14 +28,14 @@ from open_webui.env import (
     WEBSOCKET_SENTINEL_HOSTS,
     REDIS_KEY_PREFIX,
 )
-from open_webui.utils.auth import decode_token
-from open_webui.socket.utils import RedisDict, RedisLock, YdocManager
-from open_webui.tasks import create_task, stop_item_tasks
-from open_webui.utils.redis import get_redis_connection
-from open_webui.utils.access_control import has_access, get_users_with_access
+from pulsai.utils.auth import decode_token
+from pulsai.socket.utils import RedisDict, RedisLock, YdocManager
+from pulsai.tasks import create_task, stop_item_tasks
+from pulsai.utils.redis import get_redis_connection
+from pulsai.utils.access_control import has_access, get_users_with_access
 
 
-from open_webui.env import (
+from pulsai.env import (
     GLOBAL_LOG_LEVEL,
     SRC_LOG_LEVELS,
 )

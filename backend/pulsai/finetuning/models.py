@@ -6,7 +6,7 @@ Database models for managing fine-tuning jobs and datasets.
 
 from peewee import *
 from datetime import datetime
-from open_webui.internal.db import DB
+from pulsai.internal.db import DB
 
 
 class FineTuneDataset(Model):

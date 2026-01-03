@@ -3,30 +3,30 @@ from pydantic import BaseModel
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Query
 import logging
 
-from open_webui.models.knowledge import (
+from pulsai.models.knowledge import (
     Knowledges,
     KnowledgeForm,
     KnowledgeResponse,
     KnowledgeUserResponse,
 )
-from open_webui.models.files import Files, FileModel, FileMetadataResponse
-from open_webui.retrieval.vector.factory import VECTOR_DB_CLIENT
-from open_webui.routers.retrieval import (
+from pulsai.models.files import Files, FileModel, FileMetadataResponse
+from pulsai.retrieval.vector.factory import VECTOR_DB_CLIENT
+from pulsai.routers.retrieval import (
     process_file,
     ProcessFileForm,
     process_files_batch,
     BatchProcessFilesForm,
 )
-from open_webui.storage.provider import Storage
+from pulsai.storage.provider import Storage
 
-from open_webui.constants import ERROR_MESSAGES
-from open_webui.utils.auth import get_verified_user
-from open_webui.utils.access_control import has_access, has_permission
+from pulsai.constants import ERROR_MESSAGES
+from pulsai.utils.auth import get_verified_user
+from pulsai.utils.access_control import has_access, has_permission
 
 
-from open_webui.env import SRC_LOG_LEVELS
-from open_webui.config import BYPASS_ADMIN_ACCESS_CONTROL
-from open_webui.models.models import Models, ModelForm
+from pulsai.env import SRC_LOG_LEVELS
+from pulsai.config import BYPASS_ADMIN_ACCESS_CONTROL
+from pulsai.models.models import Models, ModelForm
 
 
 log = logging.getLogger(__name__)

@@ -1,12 +1,12 @@
-from open_webui.retrieval.vector.utils import process_metadata
-from open_webui.retrieval.vector.main import (
+from pulsai.retrieval.vector.utils import process_metadata
+from pulsai.retrieval.vector.main import (
     VectorDBBase,
     VectorItem,
     GetResult,
     SearchResult,
 )
-from open_webui.config import S3_VECTOR_BUCKET_NAME, S3_VECTOR_REGION
-from open_webui.env import SRC_LOG_LEVELS
+from pulsai.config import S3_VECTOR_BUCKET_NAME, S3_VECTOR_REGION
+from pulsai.env import SRC_LOG_LEVELS
 from typing import List, Optional, Dict, Any, Union
 import logging
 import boto3

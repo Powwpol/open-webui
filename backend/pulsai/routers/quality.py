@@ -9,8 +9,8 @@ from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 from loguru import logger as log
 
-from open_webui.quality.scorer import QualityScorer
-from open_webui.quality.models import QualityScore, UserFeedback, QualityAggregate
+from pulsai.quality.scorer import QualityScorer
+from pulsai.quality.models import QualityScore, UserFeedback, QualityAggregate
 
 
 router = APIRouter()

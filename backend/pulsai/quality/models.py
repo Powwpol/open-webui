@@ -6,7 +6,7 @@ Defines database models for tracking interaction quality metrics.
 
 from peewee import *
 from datetime import datetime
-from open_webui.internal.db import DB
+from pulsai.internal.db import DB
 
 # Quality Score Model
 class QualityScore(Model):

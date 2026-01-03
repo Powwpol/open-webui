@@ -15,7 +15,7 @@ KEY_FILE = Path.cwd() / ".webui_secret_key"
 
 def version_callback(value: bool):
     if value:
-        from open_webui.env import VERSION
+        from pulsai.env import VERSION
 
         typer.echo(f"Open WebUI version: {VERSION}")
         raise typer.Exit()
@@ -72,8 +72,8 @@ def serve(
             os.environ["USE_CUDA_DOCKER"] = "false"
             os.environ["LD_LIBRARY_PATH"] = ":".join(LD_LIBRARY_PATH)
 
-    import open_webui.main  # we need set environment variables before importing main
-    from open_webui.env import UVICORN_WORKERS  # Import the workers setting
+    import pulsai.main  # we need set environment variables before importing main
+    from pulsai.env import UVICORN_WORKERS  # Import the workers setting
 
     uvicorn.run(
         "open_webui.main:app",

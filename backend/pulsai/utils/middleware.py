@@ -24,57 +24,57 @@ from fastapi.responses import HTMLResponse
 from starlette.responses import Response, StreamingResponse, JSONResponse
 
 
-from open_webui.models.oauth_sessions import OAuthSessions
-from open_webui.models.chats import Chats
-from open_webui.models.folders import Folders
-from open_webui.models.users import Users
-from open_webui.socket.main import (
+from pulsai.models.oauth_sessions import OAuthSessions
+from pulsai.models.chats import Chats
+from pulsai.models.folders import Folders
+from pulsai.models.users import Users
+from pulsai.socket.main import (
     get_event_call,
     get_event_emitter,
     get_active_status_by_user_id,
 )
-from open_webui.routers.tasks import (
+from pulsai.routers.tasks import (
     generate_queries,
     generate_title,
     generate_follow_ups,
     generate_image_prompt,
     generate_chat_tags,
 )
-from open_webui.routers.retrieval import process_web_search, SearchForm
-from open_webui.routers.images import (
+from pulsai.routers.retrieval import process_web_search, SearchForm
+from pulsai.routers.images import (
     load_b64_image_data,
     image_generations,
     GenerateImageForm,
     upload_image,
 )
-from open_webui.routers.pipelines import (
+from pulsai.routers.pipelines import (
     process_pipeline_inlet_filter,
     process_pipeline_outlet_filter,
 )
-from open_webui.routers.memories import query_memory, QueryMemoryForm
+from pulsai.routers.memories import query_memory, QueryMemoryForm
 
-from open_webui.utils.webhook import post_webhook
-from open_webui.utils.files import (
+from pulsai.utils.webhook import post_webhook
+from pulsai.utils.files import (
     get_audio_url_from_base64,
     get_file_url_from_base64,
     get_image_url_from_base64,
 )
 
 
-from open_webui.models.users import UserModel
-from open_webui.models.functions import Functions
-from open_webui.models.models import Models
+from pulsai.models.users import UserModel
+from pulsai.models.functions import Functions
+from pulsai.models.models import Models
 
-from open_webui.retrieval.utils import get_sources_from_items
+from pulsai.retrieval.utils import get_sources_from_items
 
 
-from open_webui.utils.chat import generate_chat_completion
-from open_webui.utils.task import (
+from pulsai.utils.chat import generate_chat_completion
+from pulsai.utils.task import (
     get_task_model_id,
     rag_template,
     tools_function_calling_generation_template,
 )
-from open_webui.utils.misc import (
+from pulsai.utils.misc import (
     deep_update,
     get_message_list,
     add_or_update_system_message,
@@ -85,24 +85,24 @@ from open_webui.utils.misc import (
     prepend_to_first_user_message_content,
     convert_logit_bias_input_to_json,
 )
-from open_webui.utils.tools import get_tools
-from open_webui.utils.plugin import load_function_module_by_id
-from open_webui.utils.filter import (
+from pulsai.utils.tools import get_tools
+from pulsai.utils.plugin import load_function_module_by_id
+from pulsai.utils.filter import (
     get_sorted_filter_ids,
     process_filter_functions,
 )
-from open_webui.utils.code_interpreter import execute_code_jupyter
-from open_webui.utils.payload import apply_system_prompt_to_body
-from open_webui.utils.mcp.client import MCPClient
+from pulsai.utils.code_interpreter import execute_code_jupyter
+from pulsai.utils.payload import apply_system_prompt_to_body
+from pulsai.utils.mcp.client import MCPClient
 
 
-from open_webui.config import (
+from pulsai.config import (
     CACHE_DIR,
     DEFAULT_TOOLS_FUNCTION_CALLING_PROMPT_TEMPLATE,
     DEFAULT_CODE_INTERPRETER_PROMPT,
     CODE_INTERPRETER_BLOCKED_MODULES,
 )
-from open_webui.env import (
+from pulsai.env import (
     SRC_LOG_LEVELS,
     GLOBAL_LOG_LEVEL,
     CHAT_RESPONSE_STREAM_DELTA_CHUNK_SIZE,
@@ -111,7 +111,7 @@ from open_webui.env import (
     ENABLE_REALTIME_CHAT_SAVE,
     ENABLE_QUERIES_CACHE,
 )
-from open_webui.constants import TASKS
+from pulsai.constants import TASKS
 
 
 logging.basicConfig(stream=sys.stdout, level=GLOBAL_LOG_LEVEL)

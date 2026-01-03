@@ -2,19 +2,19 @@ import black
 import logging
 import markdown
 
-from open_webui.models.chats import ChatTitleMessagesForm
-from open_webui.config import DATA_DIR, ENABLE_ADMIN_EXPORT
-from open_webui.constants import ERROR_MESSAGES
+from pulsai.models.chats import ChatTitleMessagesForm
+from pulsai.config import DATA_DIR, ENABLE_ADMIN_EXPORT
+from pulsai.constants import ERROR_MESSAGES
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from pydantic import BaseModel
 from starlette.responses import FileResponse
 
 
-from open_webui.utils.misc import get_gravatar_url
-from open_webui.utils.pdf_generator import PDFGenerator
-from open_webui.utils.auth import get_admin_user, get_verified_user
-from open_webui.utils.code_interpreter import execute_code_jupyter
-from open_webui.env import SRC_LOG_LEVELS
+from pulsai.utils.misc import get_gravatar_url
+from pulsai.utils.pdf_generator import PDFGenerator
+from pulsai.utils.auth import get_admin_user, get_verified_user
+from pulsai.utils.code_interpreter import execute_code_jupyter
+from pulsai.env import SRC_LOG_LEVELS
 
 
 log = logging.getLogger(__name__)
@@ -112,7 +112,7 @@ async def download_db(user=Depends(get_admin_user)):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=ERROR_MESSAGES.ACCESS_PROHIBITED,
         )
-    from open_webui.internal.db import engine
+    from pulsai.internal.db import engine
 
     if engine.name != "sqlite":
         raise HTTPException(

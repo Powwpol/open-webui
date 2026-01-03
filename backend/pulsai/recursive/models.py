@@ -6,7 +6,7 @@ Database models for managing hierarchical chat trees.
 
 from peewee import *
 from datetime import datetime
-from open_webui.internal.db import DB
+from pulsai.internal.db import DB
 
 
 class RecursiveChat(Model):

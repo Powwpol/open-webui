@@ -10,7 +10,7 @@ from typing import Optional, Dict, Any, List
 from pydantic import BaseModel, Field
 from loguru import logger as log
 
-from open_webui.inference import (
+from pulsai.inference import (
     InferenceRequest,
     InferenceResponse,
     InferenceRouter,
@@ -19,7 +19,7 @@ from open_webui.inference import (
     VLLMBackend,
     ModelInfo
 )
-from open_webui.config import OLLAMA_BASE_URLS, VLLM_ENABLED, VLLM_BASE_URL, VLLM_API_KEY
+from pulsai.config import OLLAMA_BASE_URLS, VLLM_ENABLED, VLLM_BASE_URL, VLLM_API_KEY
 
 
 router = APIRouter()

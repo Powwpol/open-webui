@@ -1,8 +1,8 @@
 from logging.config import fileConfig
 
 from alembic import context
-from open_webui.models.auths import Auth
-from open_webui.env import DATABASE_URL, DATABASE_PASSWORD
+from pulsai.models.auths import Auth
+from pulsai.env import DATABASE_URL, DATABASE_PASSWORD
 from sqlalchemy import engine_from_config, pool, create_engine
 
 # this is the Alembic Config object, which provides

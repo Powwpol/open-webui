@@ -21,11 +21,11 @@ from typing import Optional, Union, List, Dict
 
 from opentelemetry import trace
 
-from open_webui.models.users import Users
+from pulsai.models.users import Users
 
-from open_webui.constants import ERROR_MESSAGES
+from pulsai.constants import ERROR_MESSAGES
 
-from open_webui.env import (
+from pulsai.env import (
     OFFLINE_MODE,
     LICENSE_BLOB,
     pk,

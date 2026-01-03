@@ -1,7 +1,7 @@
 import logging
 from typing import Optional, Tuple, List, Dict, Any
 
-from open_webui.config import (
+from pulsai.config import (
     MILVUS_URI,
     MILVUS_TOKEN,
     MILVUS_DB,
@@ -12,8 +12,8 @@ from open_webui.config import (
     MILVUS_HNSW_EFCONSTRUCTION,
     MILVUS_IVF_FLAT_NLIST,
 )
-from open_webui.env import SRC_LOG_LEVELS
-from open_webui.retrieval.vector.main import (
+from pulsai.env import SRC_LOG_LEVELS
+from pulsai.retrieval.vector.main import (
     GetResult,
     SearchResult,
     VectorDBBase,
