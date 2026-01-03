@@ -1,0 +1,62 @@
+# Pulsai Local - CPU Only + Ollama Int\u00e9gr\u00e9
+# Usage: docker compose -f docker-compose.local-cpu.yaml up -d
+
+services:
+  pulsai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USE_OLLAMA: "true"
+        USE_CUDA: "false"
+        USE_SLIM: "false"
+    image: pulsai:local
+    container_name: pulsai
+    ports:
+      - "3000:8080"
+    volumes:
+      - pulsai-data:/app/backend/data
+      - ollama-models:/root/.ollama
+    environment:
+      # Core
+      - WEBUI_NAME=Pulsai
+      - ENV=production
+      - PORT=8080
+
+      # Ollama (int\u00e9gr\u00e9 dans le container)
+      - OLLAMA_BASE_URL=http://localhost:11434
+
+      # Security
+      - WEBUI_SECRET_KEY=\${WEBUI_SECRET_KEY:-pulsai-local-secret-change-me}
+
+      # Features
+      - ENABLE_SIGNUP=true
+      - DEFAULT_USER_ROLE=user
+      - ENABLE_WEBHOOKS=true
+
+      # Telemetry disabled
+      - SCARF_NO_ANALYTICS=true
+      - DO_NOT_TRACK=true
+      - ANONYMIZED_TELEMETRY=false
+
+      # Optional APIs (configure in .env)
+      - OPENAI_API_KEY=\${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=\${ANTHROPIC_API_KEY:-}
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+
+volumes:
+  pulsai-data:
+    name: pulsai-data
+  ollama-models:
+    name: pulsai-ollama-models

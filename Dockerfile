@@ -24,7 +24,7 @@ ARG UID=0
 ARG GID=0
 
 ######## Pulsai Frontend ########
-FROM --platform=$BUILDPLATFORM ${BASE_NODE} AS build
+FROM --platform=linux/amd64 ${BASE_NODE} AS build
 ARG BUILD_HASH
 
 # Set Node.js options (heap limit Allocation failed - JavaScript heap out of memory)
