@@ -1,7 +1,6 @@
 <script>
 	import { io } from 'socket.io-client';
 	import { spring } from 'svelte/motion';
-	import PyodideWorker from '$lib/workers/pyodide.worker?worker';
 
 	let loadingProgress = spring(0, {
 		stiffness: 0.05
@@ -134,6 +133,8 @@
 			/\bimport\s+pytz\b|\bfrom\s+pytz\b/.test(code) ? 'pytz' : null
 		].filter(Boolean);
 
+		// Dynamic import for lazy loading - worker only loaded when Python execution is needed
+		const PyodideWorker = (await import('$lib/workers/pyodide.worker?worker')).default;
 		const pyodideWorker = new PyodideWorker();
 
 		pyodideWorker.postMessage({

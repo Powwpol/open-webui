@@ -21,7 +21,18 @@ export default defineConfig({
 		APP_BUILD_HASH: JSON.stringify(process.env.APP_BUILD_HASH || 'dev-build')
 	},
 	build: {
-		sourcemap: true
+		sourcemap: false,
+		rollupOptions: {
+			output: {
+				manualChunks: {
+					'vendor-ui': ['svelte', 'bits-ui', 'paneforge', 'svelte-sonner'],
+					'vendor-editor': ['codemirror', '@codemirror/lang-javascript', '@codemirror/lang-python', '@tiptap/core', '@tiptap/starter-kit'],
+					'vendor-charts': ['chart.js', 'mermaid'],
+					'vendor-pdf': ['pdfjs-dist'],
+					'vendor-ml': ['@huggingface/transformers', 'onnxruntime-web'],
+				}
+			}
+		}
 	},
 	worker: {
 		format: 'es'
