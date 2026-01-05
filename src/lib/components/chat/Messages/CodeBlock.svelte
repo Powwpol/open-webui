@@ -4,7 +4,6 @@
 	import { getContext, onMount, tick, onDestroy } from 'svelte';
 	import { config } from '$lib/stores';
 
-	import PyodideWorker from '$lib/workers/pyodide.worker?worker';
 	import { executeCode } from '$lib/apis/utils';
 	import { copyToClipboard, renderMermaidDiagram } from '$lib/utils';
 
@@ -230,6 +229,8 @@
 
 		console.log(packages);
 
+		// Dynamic import for lazy loading - worker only loaded when Python execution is needed
+		const PyodideWorker = (await import('$lib/workers/pyodide.worker?worker')).default;
 		pyodideWorker = new PyodideWorker();
 
 		pyodideWorker.postMessage({

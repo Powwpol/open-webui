@@ -13,8 +13,6 @@
 
 	import { onMount, createEventDispatcher, getContext, tick, onDestroy } from 'svelte';
 
-	import PyodideWorker from '$lib/workers/pyodide.worker?worker';
-
 	import { formatPythonCode } from '$lib/apis/utils';
 	import { toast } from 'svelte-sonner';
 	import { user } from '$lib/stores';
@@ -110,10 +108,15 @@
 	};
 
 	let pyodideWorkerInstance = null;
+	let PyodideWorkerClass = null;
 
-	const getPyodideWorker = () => {
+	const getPyodideWorker = async () => {
 		if (!pyodideWorkerInstance) {
-			pyodideWorkerInstance = new PyodideWorker(); // Your worker constructor
+			// Dynamic import for lazy loading - worker only loaded when needed
+			if (!PyodideWorkerClass) {
+				PyodideWorkerClass = (await import('$lib/workers/pyodide.worker?worker')).default;
+			}
+			pyodideWorkerInstance = new PyodideWorkerClass();
 		}
 		return pyodideWorkerInstance;
 	};
@@ -121,11 +124,11 @@
 	// Generate unique IDs for requests
 	let _formatReqId = 0;
 
-	const formatPythonCodePyodide = (code) => {
-		return new Promise((resolve, reject) => {
+	const formatPythonCodePyodide = async (code) => {
+		return new Promise(async (resolve, reject) => {
 			const id = `format-${++_formatReqId}`;
 			let timeout;
-			const worker = getPyodideWorker();
+			const worker = await getPyodideWorker();
 
 			const startTag = `--||CODE-START-${id}||--`;
 			const endTag = `--||CODE-END-${id}||--`;

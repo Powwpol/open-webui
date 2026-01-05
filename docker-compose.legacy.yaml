@@ -1,0 +1,61 @@
+# Pulsai - Docker Compose Legacy Build
+# Compatible avec docker-compose classique (sans BuildKit)
+# Usage: DOCKER_BUILDKIT=0 docker-compose -f docker-compose.legacy.yaml up --build
+
+services:
+  pulsai:
+    build:
+      context: .
+      dockerfile: Dockerfile.legacy
+      args:
+        - USE_SLIM=true
+        - USE_CUDA=false
+        - USE_OLLAMA=false
+        - BUILD_HASH=pulsai-legacy-build
+    image: pulsai:latest
+    container_name: pulsai
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - ENV=prod
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-pulsai-secret-key-change-me}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL:-}
+      - UVICORN_WORKERS=${UVICORN_WORKERS:-4}
+    volumes:
+      - pulsai-data:/app/backend/data
+    networks:
+      - pulsai-net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Optionnel: Redis pour le cache
+  redis:
+    image: redis:alpine
+    container_name: pulsai-redis
+    restart: unless-stopped
+    networks:
+      - pulsai-net
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  pulsai-net:
+    driver: bridge
+
+volumes:
+  pulsai-data:
+    driver: local
